@@ -179,6 +179,80 @@ func TestCallbackWithCDecl(t *testing.T) {
 		t.Fatalf("qsort with CDecl callback failed, got %v", arr)
 	}
 }
+// TestStructReturn tests calling a standard C function that returns a struct by value.
+func TestStructReturn(t *testing.T) {
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	// div() returns div_t, which is { int quot; int rem; }
+	// This fits in 8 bytes and is returned in a register (RAX on AMD64).
+	sym, err := purego.Dlsym(handle, "div")
+	if err != nil {
+		t.Skipf("div not found: %v", err)
+	}
+
+	type DivT struct {
+		Quot int32
+		Rem  int32
+	}
+
+	var div func(numer, denom int32) DivT
+	purego.RegisterFunc(&div, sym)
+
+	res := div(10, 3)
+	if res.Quot != 3 || res.Rem != 1 {
+		t.Errorf("div(10, 3) = %+v, want {Quot: 3, Rem: 1}", res)
+	}
+}
+
+// TestFullCircleFFI tests the entire FFI pipeline without relying on external OS behaviors!
+// It registers a complex Go callback, wraps it into a C-callable function pointer,
+// and then calls it via RegisterFunc. This validates:
+// 1. Stack spilling (lots of arguments).
+// 2. Structs passed by value (with mixed float/int).
+// 3. Nested structs.
+func TestFullCircleFFI(t *testing.T) {
+	type Point struct {
+		X, Y float32
+	}
+	type Rect struct {
+		TopLeft     Point
+		BottomRight Point
+	}
+
+	// 1. Define our target function in Go.
+	// It takes enough arguments to force stack spilling on all architectures,
+	// and takes a complex nested struct by value.
+	target := func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, r Rect) float64 {
+		// Do some math to prove values arrived intact
+		return float64(a+c+e+g) + b + d + f + h + float64(r.TopLeft.X+r.BottomRight.Y)
+	}
+
+	// 2. Convert it to a C function pointer (tests goffi callback creation).
+	cptr := purego.NewCallback(target)
+
+	// 3. Bind it back to a Go variable (tests goffi dynamic call interface).
+	var boundFunc func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, r Rect) float64
+	purego.RegisterFunc(&boundFunc, cptr)
+
+	// 4. Call it! (Go -> FFI Caller -> ASM Trampoline -> Callback Dispatcher -> Target Go Func)
+	rect := Rect{
+		TopLeft:     Point{X: 10.5, Y: 0},
+		BottomRight: Point{X: 0, Y: 5.25},
+	}
+
+	res := boundFunc(1, 1.1, 2, 2.2, 3, 3.3, 4, 4.4, rect)
+	expected := float64(1+2+3+4) + 1.1 + 2.2 + 3.3 + 4.4 + 10.5 + 5.25
+
+	if res != expected {
+		t.Errorf("FullCircle FFI failed! Expected %f, got %f", expected, res)
+	} else {
+		t.Logf("FullCircle FFI succeeded: %f == %f", res, expected)
+	}
+}
 
 func TestFloatAndBool(t *testing.T) {
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)

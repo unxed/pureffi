@@ -215,7 +215,7 @@ func packArg(v reflect.Value) (unsafe.Pointer, any) {
 		ptr := new(uintptr)
 		*ptr = addr
 		return unsafe.Pointer(ptr), ptr
-	case reflect.Struct:
+	case reflect.Struct, reflect.Array:
 		if !v.CanAddr() {
 			ptr := reflect.New(v.Type())
 			ptr.Elem().Set(v)
@@ -284,9 +284,22 @@ func goTypeToFfiType(t reflect.Type) *types.TypeDescriptor {
 		return types.DoubleTypeDescriptor
 	case reflect.Pointer, reflect.UnsafePointer, reflect.Func, reflect.Slice, reflect.String:
 		return types.PointerTypeDescriptor
+	case reflect.Array:
+		desc := &types.TypeDescriptor{
+			Kind:      types.StructType,
+			Size:      t.Size(),
+			Alignment: uintptr(t.Align()),
+		}
+		elemDesc := goTypeToFfiType(t.Elem())
+		for i := 0; i < t.Len(); i++ {
+			desc.Members = append(desc.Members, elemDesc)
+		}
+		return desc
 	case reflect.Struct:
 		desc := &types.TypeDescriptor{
-			Kind: types.StructType,
+			Kind:      types.StructType,
+			Size:      t.Size(),
+			Alignment: uintptr(t.Align()),
 		}
 		for i := 0; i < t.NumField(); i++ {
 			desc.Members = append(desc.Members, goTypeToFfiType(t.Field(i).Type))
