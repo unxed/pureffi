@@ -42,7 +42,7 @@ If you have cloned this repository locally:
 ```go
 module your_project
 
-go 1.25
+go 1.25.5
 
 replace github.com/ebitengine/purego => ../pureffi
 ```
@@ -52,7 +52,7 @@ If you are pointing to a published fork:
 ```go
 module your_project
 
-go 1.25
+go 1.25.5
 
 replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.0
 ```
