@@ -1,6 +1,6 @@
 # pureffi — Unified Drop-In Replacement for purego built on goffi
 
-`pureffi` is a transparent, drop-in replacement for the excellent `github.com/ebitengine/purego` library, built entirely on top of `github.com/go-webgpu/goffi`. It provides 1:1 API compatibility with `purego` while eliminating linker conflicts when both ecosystems are used within the same Go project.
+`pureffi` is a transparent, drop-in replacement for the excellent [ebitengine/purego](https://github.com/ebitengine/purego) library, built entirely on top of [go-webgpu/goffi](https://github.com/go-webgpu/goffi). It provides 1:1 API compatibility with `purego` while eliminating linker conflicts when both ecosystems are used within the same Go project.
 
 ---
 
