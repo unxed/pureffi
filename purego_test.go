@@ -253,6 +253,28 @@ func TestFullCircleFFI(t *testing.T) {
 		t.Logf("FullCircle FFI succeeded: %f == %f", res, expected)
 	}
 }
+// TestNilPointerAndSlice ensures that passing Go 'nil' for pointers
+// correctly translates to a C NULL (0) pointer and doesn't cause nil-dereference panics.
+func TestNilPointerAndSlice(t *testing.T) {
+	// Our target function simulates a C function that checks for NULL pointers
+	target := func(ptr *int32, ptr2 *byte) uintptr {
+		if ptr == nil && ptr2 == nil {
+			return 1
+		}
+		return 0
+	}
+
+	cptr := purego.NewCallback(target)
+
+	var boundFunc func(ptr *int32, ptr2 *byte) uintptr
+	purego.RegisterFunc(&boundFunc, cptr)
+
+	// Call with explicit nils
+	res := boundFunc(nil, nil)
+	if res != 1 {
+		t.Errorf("Expected 1 (nils correctly translated to NULL), got %d", res)
+	}
+}
 
 func TestFloatAndBool(t *testing.T) {
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
