@@ -1,4 +1,4 @@
-//go:build !windows
+//go:build darwin || ios
 
 package purego
 
@@ -8,10 +8,8 @@ import (
 	"github.com/go-webgpu/goffi/ffi"
 )
 
-// Constants as defined in typical POSIX systems for compatibility.
-// Note: goffi abstracts this away, so these are provided for API compatibility.
 const (
-	RTLD_DEFAULT = 0
+	RTLD_DEFAULT = ^uintptr(0) - 1
 	RTLD_LAZY    = 1
 	RTLD_NOW     = 2
 	RTLD_LOCAL   = 4

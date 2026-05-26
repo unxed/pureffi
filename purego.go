@@ -30,6 +30,9 @@ func RegisterLibFunc(fptr any, handle uintptr, name string) {
 
 // RegisterFunc takes a pointer to a Go function representing the calling convention of the C function.
 func RegisterFunc(fptr any, cfn uintptr) {
+	if cfn == 0 {
+		panic("purego: cfn is nil")
+	}
 	fn := reflect.ValueOf(fptr).Elem()
 	ty := fn.Type()
 	if ty.Kind() != reflect.Func {
