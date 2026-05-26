@@ -1,4 +1,4 @@
-# pureffi — Unified Drop-In Replacement for purego built on goffi
+# pureffi — purego API built on goffi
 
 `pureffi` is a transparent, drop-in replacement for the excellent [ebitengine/purego](https://github.com/ebitengine/purego) library, built entirely on top of [go-webgpu/goffi](https://github.com/go-webgpu/goffi). It provides 1:1 API compatibility with `purego` while eliminating linker conflicts when both ecosystems are used within the same Go project.
 
@@ -37,18 +37,6 @@ Because `pureffi` does not include its own duplicate assembler trampolines or `f
 
 To use `pureffi` in your project, simply add a `replace` directive to your `go.mod` file.
 
-### Local Replacement
-If you have cloned this repository locally:
-```go
-module your_project
-
-go 1.25.5
-
-replace github.com/ebitengine/purego => ../pureffi
-```
-
-### Remote Replacement
-If you are pointing to a published fork:
 ```go
 module your_project
 
