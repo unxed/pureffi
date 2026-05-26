@@ -15,7 +15,7 @@ However, because they both define identical runtime symbols (such as `_cgo_init`
 ```bash
 duplicate definition of symbol _cgo_init
 ```
-This conflict made it extremely difficult to build unified, CGO-free Go applications that wanted to leverage both Ebitengine packages (like `ebiten` or `oto`) and `go-webgpu` packages at the same time.
+This conflict made it difficult to build unified, CGO-free Go applications that wanted to leverage both Ebitengine packages (like `ebiten` or `oto`) and `go-webgpu` packages at the same time.
 
 ### The Solution: pureffi
 `pureffi` solves this conflict by implementing the exact `purego` public API (`Dlopen`, `Dlsym`, `RegisterFunc`, `NewCallback`, `SyscallN`, and the `objc` / `cstrings` subpackages) using `goffi` as the underlying execution engine.
