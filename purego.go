@@ -81,7 +81,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 
 	var fixedArgTypes []*types.TypeDescriptor
 	for i := startIn; i < fixedIn; i++ {
-		fixedArgTypes = append(fixedArgTypes, goTypeToFfiType(ty.In(i)))
+		fixedArgTypes = append(fixedArgTypes, goArgTypeToFfiType(ty.In(i)))
 	}
 
 	var retType *types.TypeDescriptor = types.VoidTypeDescriptor
@@ -103,6 +103,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 		var keepAlive []any
 		defer func() {
 			runtime.KeepAlive(keepAlive)
+			runtime.KeepAlive(args)
 		}()
 
 		actualArgTypes := append([]*types.TypeDescriptor(nil), fixedArgTypes...)
@@ -125,7 +126,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 				if elem.Kind() == reflect.Interface {
 					elem = elem.Elem()
 				}
-				actualArgTypes = append(actualArgTypes, goTypeToFfiType(elem.Type()))
+				actualArgTypes = append(actualArgTypes, goArgTypeToFfiType(elem.Type()))
 				ptr, kept := packArg(elem)
 				ffiArgs = append(ffiArgs, ptr)
 				if kept != nil {
@@ -218,7 +219,17 @@ func packArg(v reflect.Value) (unsafe.Pointer, any) {
 		ptr := new(uintptr)
 		*ptr = addr
 		return unsafe.Pointer(ptr), ptr
-	case reflect.Struct, reflect.Array:
+	case reflect.Array:
+		if !v.CanAddr() {
+			ptr := reflect.New(v.Type())
+			ptr.Elem().Set(v)
+			v = ptr.Elem()
+		}
+		addr := v.UnsafeAddr()
+		ptr := new(uintptr)
+		*ptr = addr
+		return unsafe.Pointer(ptr), v.Interface()
+	case reflect.Struct:
 		if !v.CanAddr() {
 			ptr := reflect.New(v.Type())
 			ptr.Elem().Set(v)
@@ -261,6 +272,13 @@ func cStringToGoString(addr uintptr) string {
 		length++
 	}
 	return string(unsafe.Slice((*byte)(ptr), length))
+}
+
+func goArgTypeToFfiType(t reflect.Type) *types.TypeDescriptor {
+	if t.Kind() == reflect.Array {
+		return types.PointerTypeDescriptor
+	}
+	return goTypeToFfiType(t)
 }
 
 func goTypeToFfiType(t reflect.Type) *types.TypeDescriptor {
