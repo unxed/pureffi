@@ -1,26 +1,10 @@
 package purego_test
 
 import (
-	"runtime"
 	"testing"
 
 	"github.com/ebitengine/purego"
 )
-
-func getSystemLibrary() string {
-	switch runtime.GOOS {
-	case "darwin":
-		return "/usr/lib/libSystem.B.dylib"
-	case "linux":
-		return "libc.so.6"
-	case "freebsd":
-		return "libc.so.7"
-	case "windows":
-		return "msvcrt.dll"
-	default:
-		return ""
-	}
-}
 
 func TestRegisterFunc_ArrayArgument(t *testing.T) {
 	libPath := getSystemLibrary()

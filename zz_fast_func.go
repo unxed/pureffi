@@ -11,6 +11,7 @@ import (
 	"math"
 	"reflect"
 	"runtime"
+	"sync"
 	"unsafe"
 
 	"github.com/go-webgpu/goffi/ffi"
@@ -23,21 +24,40 @@ func forceFuncPtr(dst reflect.Value, src any) {
 	*(*unsafe.Pointer)(dstPtr) = *srcPtr
 }
 
+type fastCallContext struct {
+	ints   [15]uintptr
+	floats [8]uintptr
+	args   [23]unsafe.Pointer
+	ret    uintptr
+}
+
+var fastCallPool = sync.Pool{
+	New: func() any {
+		return &fastCallContext{}
+	},
+}
+
 func fastCallIF(cif *types.CallInterface, cfn uintptr, ints [15]uintptr, floats [8]uintptr) uintptr {
-	var args [23]unsafe.Pointer
+	ctx := fastCallPool.Get().(*fastCallContext)
+	ctx.ints = ints
+	ctx.floats = floats
+
 	var argIdx, iIdx, fIdx int
 	for _, t := range cif.ArgTypes {
 		if t.Kind == types.FloatType || t.Kind == types.DoubleType {
-			args[argIdx] = unsafe.Pointer(&floats[fIdx])
+			ctx.args[argIdx] = unsafe.Pointer(&ctx.floats[fIdx])
 			fIdx++
 		} else {
-			args[argIdx] = unsafe.Pointer(&ints[iIdx])
+			ctx.args[argIdx] = unsafe.Pointer(&ctx.ints[iIdx])
 			iIdx++
 		}
 		argIdx++
 	}
-	var ret uintptr
-	ffi.CallFunction(cif, unsafe.Pointer(cfn), unsafe.Pointer(&ret), args[:argIdx])
+
+	ctx.ret = 0
+	ffi.CallFunction(cif, unsafe.Pointer(cfn), unsafe.Pointer(&ctx.ret), ctx.args[:argIdx])
+	ret := ctx.ret
+	fastCallPool.Put(ctx)
 	return ret
 }
 
