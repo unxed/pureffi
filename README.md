@@ -42,7 +42,7 @@ module your_project
 
 go 1.25.5
 
-replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.0
+replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.3
 ```
 
 Once the replacement is configured, Go will automatically route all `import "github.com/ebitengine/purego"` statements to `pureffi`'s `goffi`-backed implementation. No further action is required.
