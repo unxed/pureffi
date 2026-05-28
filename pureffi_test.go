@@ -19,6 +19,7 @@ const cIntegrationSource = `
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 typedef struct {
     int32_t x;
@@ -82,6 +83,12 @@ MyPoint c_make_point(int32_t x, int32_t y) {
 
 double c_sum_rect(MyRect r) {
     return r.x + r.y + r.w + r.h;
+}
+
+_Bool c_test_bool_and_array(_Bool cond, uint8_t arr[4]) {
+    if (!cond) return false;
+    uint32_t sum = arr[0] + arr[1] + arr[2] + arr[3];
+    return (sum == 10);
 }
 `
 
@@ -289,5 +296,26 @@ func TestPureffiIntegration(t *testing.T) {
 		if got := sumRect(rect); math.Abs(got-12.0) > 1e-9 {
 			t.Errorf("sumRect(1.5, 2.5, 3.5, 4.5) = %f, want 12.0", got)
 		}
+	}
+
+	// 12. Test Booleans and Fixed-Size Arrays (including non-addressable array values)
+	symTestBoolAndArray, err := purego.Dlsym(handle, "c_test_bool_and_array")
+	if err != nil {
+		t.Fatalf("Dlsym c_test_bool_and_array failed: %v", err)
+	}
+	var testBoolAndArray func(bool, [4]byte) bool
+	purego.RegisterFunc(&testBoolAndArray, symTestBoolAndArray)
+
+	// cond: true, sum == 10 -> true
+	if got := testBoolAndArray(true, [4]byte{1, 2, 3, 4}); !got {
+		t.Error("testBoolAndArray(true, {1,2,3,4}) returned false, want true")
+	}
+	// cond: false -> false
+	if got := testBoolAndArray(false, [4]byte{1, 2, 3, 4}); got {
+		t.Error("testBoolAndArray(false, {1,2,3,4}) returned true, want false")
+	}
+	// cond: true, sum != 10 -> false
+	if got := testBoolAndArray(true, [4]byte{1, 1, 1, 1}); got {
+		t.Error("testBoolAndArray(true, {1,1,1,1}) returned true, want false")
 	}
 }
