@@ -38,8 +38,23 @@ func RegisterFunc(fptr any, cfn uintptr) {
 	if ty.Kind() != reflect.Func {
 		panic("purego: fptr must be a function pointer")
 	}
-	if ty.NumOut() > 1 {
-		panic("purego: function can only return zero or one values")
+
+	numOut := ty.NumOut()
+	if numOut > 2 {
+		panic("purego: function can only return up to two values")
+	}
+
+	var errorType = reflect.TypeOf((*error)(nil)).Elem()
+	hasError := false
+	if numOut == 2 {
+		if ty.Out(1) != errorType {
+			panic("purego: second return value must be an error")
+		}
+		hasError = true
+	} else if numOut == 1 {
+		if ty.Out(0) == errorType {
+			hasError = true
+		}
 	}
 
 	convention := types.DefaultCall
@@ -85,7 +100,9 @@ func RegisterFunc(fptr any, cfn uintptr) {
 	}
 
 	var retType *types.TypeDescriptor = types.VoidTypeDescriptor
-	if ty.NumOut() == 1 {
+	if numOut == 2 {
+		retType = goTypeToFfiType(ty.Out(0))
+	} else if numOut == 1 && !hasError {
 		retType = goTypeToFfiType(ty.Out(0))
 	}
 
@@ -99,7 +116,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 		}
 	}
 
-	if !isGoVariadic && tryRegisterFastPath(fn, &fixedCif, cfn, ty) {
+	if !isGoVariadic && !hasError && tryRegisterFastPath(fn, &fixedCif, cfn, ty) {
 		return
 	}
 
@@ -109,6 +126,15 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			runtime.KeepAlive(keepAlive)
 			runtime.KeepAlive(args)
 		}()
+		if hasError {
+			runtime.LockOSThread()
+			defer runtime.UnlockOSThread()
+		}
+
+		var getErr func() error
+		if hasError {
+			_, getErr = clrAndGetErrno()
+		}
 
 		actualArgTypes := append([]*types.TypeDescriptor(nil), fixedArgTypes...)
 		var ffiArgs []unsafe.Pointer
@@ -165,9 +191,11 @@ func RegisterFunc(fptr any, cfn uintptr) {
 		var retVal reflect.Value
 		var retBuf [32]byte // Large enough for struct returns
 
-		if ty.NumOut() == 1 {
-			retVal = reflect.New(ty.Out(0))
-			switch ty.Out(0).Kind() {
+		hasActualReturn := (numOut == 2) || (numOut == 1 && !hasError)
+		if hasActualReturn {
+			outType := ty.Out(0)
+			retVal = reflect.New(outType)
+			switch outType.Kind() {
 			case reflect.String, reflect.Bool, reflect.Pointer, reflect.UnsafePointer, reflect.Func, reflect.Slice:
 				rvalue = unsafe.Pointer(&retBuf[0])
 			default:
@@ -181,9 +209,33 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			panic(err)
 		}
 
-		if ty.NumOut() == 1 {
+		var errVal error
+		if hasError {
+			errVal = getErr()
+		}
+
+		if numOut == 2 {
 			unpackRet(ty.Out(0), rvalue, retVal)
-			return []reflect.Value{retVal.Elem()}
+			var errReflectVal reflect.Value
+			if errVal != nil {
+				errReflectVal = reflect.ValueOf(errVal).Convert(errorType)
+			} else {
+				errReflectVal = reflect.Zero(errorType)
+			}
+			return []reflect.Value{retVal.Elem(), errReflectVal}
+		} else if numOut == 1 {
+			if hasError {
+				var errReflectVal reflect.Value
+				if errVal != nil {
+					errReflectVal = reflect.ValueOf(errVal).Convert(errorType)
+				} else {
+					errReflectVal = reflect.Zero(errorType)
+				}
+				return []reflect.Value{errReflectVal}
+			} else {
+				unpackRet(ty.Out(0), rvalue, retVal)
+				return []reflect.Value{retVal.Elem()}
+			}
 		}
 		return nil
 	})

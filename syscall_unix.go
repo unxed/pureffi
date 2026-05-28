@@ -5,6 +5,7 @@ package purego
 import (
 	"runtime"
 	"sync"
+	"syscall"
 	"unsafe"
 
 	"github.com/go-webgpu/goffi/ffi"
@@ -33,6 +34,31 @@ func initErrno() {
 	if err == nil && sym != 0 {
 		errnoFn = sym
 		ffi.PrepareCallInterface(&errnoCif, types.DefaultCall, types.PointerTypeDescriptor, nil)
+	}
+}
+func getErrnoPtr() uintptr {
+	errnoOnce.Do(initErrno)
+	if errnoFn == 0 {
+		return 0
+	}
+	var ptr uintptr
+	_ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ptr), nil)
+	return ptr
+}
+
+func clrAndGetErrno() (uintptr, func() error) {
+	ptr := getErrnoPtr()
+	if ptr != 0 {
+		*(*int32)(unsafe.Pointer(ptr)) = 0
+	}
+	return ptr, func() error {
+		if ptr != 0 {
+			errno := *(*int32)(unsafe.Pointer(ptr))
+			if errno != 0 {
+				return syscall.Errno(errno)
+			}
+		}
+		return nil
 	}
 }
 

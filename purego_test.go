@@ -4,6 +4,8 @@ import (
 	"runtime"
 	"testing"
 	"unsafe"
+    "syscall"
+    "errors"
 
 	"github.com/ebitengine/purego"
 )
@@ -292,6 +294,62 @@ func TestFloatAndBool(t *testing.T) {
 		purego.RegisterFunc(&floor, symFloor)
 		if res := floor(3.99); res != 3.0 {
 			t.Errorf("floor(3.99) = %f, want 3.0", res)
+		}
+	}
+}
+
+func TestErrnoAccess(t *testing.T) {
+	libName := getSystemLibrary()
+	if libName == "" {
+		t.Skipf("skipping on unsupported platform %s", runtime.GOOS)
+	}
+
+	libc, err := purego.Dlopen(libName, purego.RTLD_NOW|purego.RTLD_GLOBAL)
+	if err != nil {
+		t.Fatalf("failed to open libc: %v", err)
+	}
+	defer purego.Dlclose(libc)
+
+	// 1. Test standard signature returning (value, error)
+	var strtoll func(nptr string, endptr unsafe.Pointer, base int) (int64, error)
+	purego.RegisterFunc(&strtoll, func() uintptr {
+		sym, err := purego.Dlsym(libc, "strtoll")
+		if err != nil {
+			t.Fatalf("failed to find strtoll: %v", err)
+		}
+		return sym
+	}())
+
+	// Successful call (errno should remain 0, error is nil)
+	val, err := strtoll("12345", nil, 10)
+	if err != nil {
+		t.Errorf("expected no error, got: %v", err)
+	}
+	if val != 12345 {
+		t.Errorf("expected 12345, got %d", val)
+	}
+
+	// Overflow call (should trigger ERANGE error)
+	_, err = strtoll("9999999999999999999999999999999999999999999999999", nil, 10)
+	if err == nil {
+		t.Error("expected ERANGE error, got nil")
+	} else {
+		if !errors.Is(err, syscall.ERANGE) {
+			t.Errorf("expected ERANGE error, got: %v", err)
+		}
+	}
+
+	// 2. Test void-return signature returning only (error)
+	var strtollVoid func(nptr string, endptr unsafe.Pointer, base int) error
+	purego.RegisterLibFunc(&strtollVoid, libc, "strtoll")
+
+	// Trigger overflow on void-return function
+	err = strtollVoid("9999999999999999999999999999999999999999999999999", nil, 10)
+	if err == nil {
+		t.Error("expected ERANGE error, got nil")
+	} else {
+		if !errors.Is(err, syscall.ERANGE) {
+			t.Errorf("expected ERANGE error, got: %v", err)
 		}
 	}
 }
