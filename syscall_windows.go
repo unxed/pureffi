@@ -11,6 +11,7 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	r1, r2, errno := syscall.SyscallN(fn, args...)
 	return r1, r2, uintptr(errno)
 }
+
 var (
 	lazyKernel32     = syscall.NewLazyDLL("kernel32.dll")
 	procSetLastError = lazyKernel32.NewProc("SetLastError")

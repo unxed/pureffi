@@ -1,11 +1,11 @@
 package purego_test
 
 import (
+	"errors"
 	"runtime"
+	"syscall"
 	"testing"
 	"unsafe"
-    "syscall"
-    "errors"
 
 	"github.com/ebitengine/purego"
 )
