@@ -4,6 +4,7 @@ package purego
 
 import (
 	"runtime"
+	"structs"
 	"sync"
 	"unsafe"
 
@@ -12,6 +13,7 @@ import (
 )
 
 type dl_info struct {
+	_         structs.HostLayout
 	dli_fname uintptr
 	dli_fbase uintptr
 	dli_sname uintptr
