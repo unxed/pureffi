@@ -14,10 +14,10 @@ import (
 )
 
 const (
-	blockBaseClass = "__NSMallocBlock__"
-	blockFlags = blockHasCopyDispose | blockHasSignature
+	blockBaseClass      = "__NSMallocBlock__"
+	blockFlags          = blockHasCopyDispose | blockHasSignature
 	blockHasCopyDispose = 1 << 25
-	blockHasSignature = 1 << 30
+	blockHasSignature   = 1 << 30
 )
 
 type blockDescriptor struct {

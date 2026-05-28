@@ -99,6 +99,10 @@ func RegisterFunc(fptr any, cfn uintptr) {
 		}
 	}
 
+	if !isGoVariadic && tryRegisterFastPath(fn, &fixedCif, cfn, ty) {
+		return
+	}
+
 	v := reflect.MakeFunc(ty, func(args []reflect.Value) []reflect.Value {
 		var keepAlive []any
 		defer func() {

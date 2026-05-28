@@ -3,7 +3,7 @@ package purego_test
 import (
 	"runtime"
 	"testing"
-    "unsafe"
+	"unsafe"
 
 	"github.com/ebitengine/purego"
 )
@@ -179,6 +179,7 @@ func TestCallbackWithCDecl(t *testing.T) {
 		t.Fatalf("qsort with CDecl callback failed, got %v", arr)
 	}
 }
+
 // TestStructReturn tests calling a standard C function that returns a struct by value.
 func TestStructReturn(t *testing.T) {
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
@@ -253,6 +254,7 @@ func TestFullCircleFFI(t *testing.T) {
 		t.Logf("FullCircle FFI succeeded: %f == %f", res, expected)
 	}
 }
+
 // TestNilPointerAndSlice ensures that passing Go 'nil' for pointers
 // correctly translates to a C NULL (0) pointer and doesn't cause nil-dereference panics.
 func TestNilPointerAndSlice(t *testing.T) {
