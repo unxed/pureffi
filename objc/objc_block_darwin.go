@@ -6,6 +6,7 @@ package objc
 import (
 	"fmt"
 	"reflect"
+	"structs"
 	"sync"
 	"unsafe"
 
@@ -21,6 +22,7 @@ const (
 )
 
 type blockDescriptor struct {
+	_         structs.HostLayout
 	_         uintptr
 	size      uintptr
 	_         uintptr
@@ -29,6 +31,7 @@ type blockDescriptor struct {
 }
 
 type blockLayout struct {
+	_          structs.HostLayout
 	isa        Class
 	flags      uint32
 	_          uint32
