@@ -1,6 +1,7 @@
 package purego
 
 import (
+    "sync"
 	"reflect"
 	"runtime"
 	"strings"
@@ -121,12 +122,19 @@ func RegisterFunc(fptr any, cfn uintptr) {
 	}
 
 	v := reflect.MakeFunc(ty, func(args []reflect.Value) []reflect.Value {
-		var keepAliveBuf [16]any
-		keepAlive := keepAliveBuf[:0]
+		ctx := slowCallPool.Get().(*slowCallContext)
+		keepAliveCount := 0
+		ffiArgsCount := 0
+
 		defer func() {
-			runtime.KeepAlive(keepAlive)
+			// Explicitly clear keepAlive references so we don't leak memory in the pool
+			for i := 0; i < keepAliveCount; i++ {
+				ctx.keepAlive[i] = nil
+			}
+			slowCallPool.Put(ctx)
 			runtime.KeepAlive(args)
 		}()
+
 		if hasError {
 			runtime.LockOSThread()
 			defer runtime.UnlockOSThread()
@@ -137,15 +145,14 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			_, getErr = clrAndGetErrno()
 		}
 
-		var ffiArgsBuf [16]unsafe.Pointer
-		ffiArgs := ffiArgsBuf[:0]
-
 		// Pack fixed args
 		for i := startIn; i < fixedIn; i++ {
 			ptr, kept := packArg(args[i])
-			ffiArgs = append(ffiArgs, ptr)
+			ctx.ffiArgs[ffiArgsCount] = ptr
+			ffiArgsCount++
 			if kept != nil {
-				keepAlive = append(keepAlive, kept)
+				ctx.keepAlive[keepAliveCount] = kept
+				keepAliveCount++
 			}
 		}
 
@@ -163,9 +170,11 @@ func RegisterFunc(fptr any, cfn uintptr) {
 				}
 				actualArgTypes = append(actualArgTypes, goArgTypeToFfiType(elem.Type()))
 				ptr, kept := packArg(elem)
-				ffiArgs = append(ffiArgs, ptr)
+				ctx.ffiArgs[ffiArgsCount] = ptr
+				ffiArgsCount++
 				if kept != nil {
-					keepAlive = append(keepAlive, kept)
+					ctx.keepAlive[keepAliveCount] = kept
+					keepAliveCount++
 				}
 			}
 		}
@@ -194,7 +203,6 @@ func RegisterFunc(fptr any, cfn uintptr) {
 
 		var rvalue unsafe.Pointer
 		var retVal reflect.Value
-		var retBuf [32]byte // Large enough for struct returns
 
 		hasActualReturn := (numOut == 2) || (numOut == 1 && !hasError)
 		if hasActualReturn {
@@ -202,14 +210,14 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			retVal = reflect.New(outType)
 			switch outType.Kind() {
 			case reflect.String, reflect.Bool, reflect.Pointer, reflect.UnsafePointer, reflect.Func, reflect.Slice:
-				rvalue = unsafe.Pointer(&retBuf[0])
+				rvalue = unsafe.Pointer(&ctx.retBuf[0])
 			default:
 				// Primitive types or structures get populated directly into the new allocation
 				rvalue = unsafe.Pointer(retVal.Pointer())
 			}
 		}
 
-		err := ffi.CallFunction(cif, unsafe.Pointer(cfn), rvalue, ffiArgs)
+		err := ffi.CallFunction(cif, unsafe.Pointer(cfn), rvalue, ctx.ffiArgs[:ffiArgsCount])
 		if err != nil {
 			panic(err)
 		}
@@ -393,6 +401,18 @@ func goTypeToFfiType(t reflect.Type) *types.TypeDescriptor {
 }
 
 // NewCallback converts a Go function to a function pointer conforming to the C calling convention.
+type slowCallContext struct {
+	keepAlive [32]any
+	ffiArgs   [32]unsafe.Pointer
+	retBuf    [32]byte
+}
+
+var slowCallPool = sync.Pool{
+	New: func() any {
+		return &slowCallContext{}
+	},
+}
+
 func NewCallback(fn any) uintptr {
 	ty := reflect.TypeOf(fn)
 	if ty.Kind() != reflect.Func {
