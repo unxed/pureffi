@@ -1,7 +1,7 @@
 package purego
 
 import (
-    "sync"
+	"sync"
 	"reflect"
 	"runtime"
 	"strings"
