@@ -28,7 +28,7 @@ func BenchmarkFastPath(b *testing.B) {
 }
 
 // BenchmarkSlowPath проверяет производительность "медленного пути" (fallback).
-// Передаем структуру, чтобы заставить pureffi использовать reflect.MakeFunc без оптимизаций fast_func.
+// Передаем строку, чтобы заставить pureffi использовать reflect.MakeFunc с авто-маршалингом string -> char*.
 func BenchmarkSlowPath(b *testing.B) {
 	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
 	if err != nil {
@@ -36,16 +36,11 @@ func BenchmarkSlowPath(b *testing.B) {
 	}
 	defer purego.Dlclose(libc)
 
-	// Структура принудительно направит регистрацию в "медленный путь",
-	// так как структуры не покрываются tryRegisterFastPath
-	type Dummy struct{ a int32 }
-	var absSlow func(Dummy) int32
-	purego.RegisterLibFunc(&absSlow, libc, "abs")
-
-	arg := Dummy{a: -1}
+	var strlen func(string) uintptr
+	purego.RegisterLibFunc(&strlen, libc, "strlen")
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = absSlow(arg)
+		_ = strlen("benchmark\x00")
 	}
 }
