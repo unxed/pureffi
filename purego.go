@@ -121,7 +121,8 @@ func RegisterFunc(fptr any, cfn uintptr) {
 	}
 
 	v := reflect.MakeFunc(ty, func(args []reflect.Value) []reflect.Value {
-		var keepAlive []any
+		var keepAliveBuf [16]any
+		keepAlive := keepAliveBuf[:0]
 		defer func() {
 			runtime.KeepAlive(keepAlive)
 			runtime.KeepAlive(args)
@@ -136,8 +137,8 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			_, getErr = clrAndGetErrno()
 		}
 
-		actualArgTypes := append([]*types.TypeDescriptor(nil), fixedArgTypes...)
-		var ffiArgs []unsafe.Pointer
+		var ffiArgsBuf [16]unsafe.Pointer
+		ffiArgs := ffiArgsBuf[:0]
 
 		// Pack fixed args
 		for i := startIn; i < fixedIn; i++ {
@@ -148,8 +149,12 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			}
 		}
 
-		// Pack variadic args ("purego" style: unpacked from slice)
+		var actualArgTypes []*types.TypeDescriptor
 		if isGoVariadic {
+			actualArgTypes = make([]*types.TypeDescriptor, 0, len(fixedArgTypes)+args[numIn-1].Len())
+			actualArgTypes = append(actualArgTypes, fixedArgTypes...)
+
+			// Pack variadic args ("purego" style: unpacked from slice)
 			varSlice := args[numIn-1]
 			for i := 0; i < varSlice.Len(); i++ {
 				elem := varSlice.Index(i)

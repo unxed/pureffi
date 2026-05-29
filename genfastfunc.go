@@ -90,8 +90,8 @@ import (
 	"math"
 	"reflect"
 	"runtime"
-	"sync"
 	"unsafe"
+    "sync"
 
 	"github.com/go-webgpu/goffi/ffi"
 	"github.com/go-webgpu/goffi/types"
