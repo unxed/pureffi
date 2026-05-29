@@ -29,7 +29,45 @@ Because `pureffi` does not include its own duplicate assembler trampolines or `f
 - **1:1 API Compatibility**: Works as a drop-in replacement via Go's `replace` directive. You do not need to change a single import statement in your existing codebase.
 - **Unified Dependency Graph**: Allows using `ebiten`-based projects and `go-webgpu` modules together without CGO or linker errors.
 - **Apple Silicon C-Variadic ABI Fix**: Fixes a long-standing ABI mismatch on macOS/ARM64. Under the hood, `pureffi` uses runtime introspection (`dladdr`) to detect whether the target function is a true C-variadic function (like `sprintf`, which requires variadic arguments to be passed on the stack) or a standard dynamic dispatcher (like `objc_msgSend`, which expects them in registers), ensuring stable execution.
+- **Optimized Fast-Path**: Leverages object pooling on dispatching hot-paths, reducing fast-path heap allocations down to a single allocation per call.
+- **Fixed-size array arguments** support in RegisterFunc
+- **Structs by Value**: Supports passing and returning structs by value.
+- **CString and GoString functions** to match the Go C package
 - **Robust Struct and Array Passing**: Inherits `goffi`'s mature, recursive struct-passing by value and by reference.
+- **errno capturing**
+- **structs.HostLayout** support
+
+---
+
+## Behind the Scenes
+
+Initially, `pureffi` started as a straightforward, lightweight wrapper over `goffi`—primarily to resolve the symbol linker conflict without forcing developers to juggle custom build tags.
+
+However, once the wrapper was working, the results looked promising enough that I decided to see if I could make it even better. So I spent some time optimizing dispatcher hot-paths and addressing a few community requests and architectural discussions from the `purego` issue tracker.
+
+---
+
+## Performance & Memory Benchmarks
+
+Thanks to `goffi`'s highly optimized engine and targeted call-path optimizations, `pureffi` achieves lower latencies and fewer heap allocations on certain execution paths—especially the fast-path dispatcher.
+
+Below is a comparison of benchmarks run on AMD64 Linux:
+
+### `purego` (Original)
+```
+BenchmarkFastPath-4      2005327               574.4 ns/op           264 B/op          5 allocs/op
+BenchmarkSlowPath-4      1861425               639.5 ns/op           296 B/op          6 allocs/op
+BenchmarkSyscallN-4      5726388               199.6 ns/op           216 B/op          2 allocs/op
+```
+
+### `pureffi` (with `goffi` wrapper)
+```
+BenchmarkFastPath-4      4753861               255.5 ns/op           208 B/op          1 allocs/op
+BenchmarkSlowPath-4      1718974               691.6 ns/op           304 B/op          7 allocs/op
+BenchmarkSyscallN-4      4487470               259.6 ns/op           216 B/op          2 allocs/op
+```
+
+Notably, `pureffi` reduces **FastPath** heap allocations from **5 down to just 1 allocation per operation**, cutting average latency by over 50%.
 
 ---
 
@@ -61,7 +99,7 @@ go test -v ./...
 
 ## Acknowledgments
 
-`pureffi` is merely a bridge between two monumental projects. We would like to express our deepest gratitude to:
+`pureffi` is merely a bridge between two monumental projects. I would like to express our deepest gratitude to:
 
 - **The Ebitengine team (Hajime Hoshi and contributors)**: For creating `purego`, proving that CGO-less FFI is possible, and establishing the groundwork for the modern pure-Go graphics ecosystem.
 - **The go-webgpu team (kolkov and contributors)**: For engineering `goffi` with its highly optimized, audited ABI calling conventions, extensive structure alignment handling, and robust platform support.
