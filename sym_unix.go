@@ -62,7 +62,7 @@ func getSymbolName(addr uintptr) string {
 		unsafe.Pointer(&infoPtr),
 	}
 
-	_ = ffi.CallFunction(&dladdrCif, unsafe.Pointer(dladdrFn), unsafe.Pointer(&res), args)
+	_, _ = ffi.CallFunction(&dladdrCif, unsafe.Pointer(dladdrFn), unsafe.Pointer(&res), args)
 
 	if res != 0 && info.dli_sname != 0 {
 		return cStringToGoString(info.dli_sname)

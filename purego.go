@@ -217,7 +217,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			}
 		}
 
-		err := ffi.CallFunction(cif, unsafe.Pointer(cfn), rvalue, ctx.ffiArgs[:ffiArgsCount])
+		_, err := ffi.CallFunction(cif, unsafe.Pointer(cfn), rvalue, ctx.ffiArgs[:ffiArgsCount])
 		if err != nil {
 			panic(err)
 		}

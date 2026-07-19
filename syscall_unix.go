@@ -42,7 +42,7 @@ func getErrnoPtr() uintptr {
 		return 0
 	}
 	var ptr uintptr
-	_ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ptr), nil)
+	_, _ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ptr), nil)
 	return ptr
 }
 
@@ -131,7 +131,7 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 
 	// Perform actual C call.
 	// ctx.ffiArgs is already pre-populated with addresses pointing into ctx.args.
-	_ = ffi.CallFunction(cif, unsafe.Pointer(fn), unsafe.Pointer(&ctx.result), ctx.ffiArgs[:nArgs])
+	_, _ = ffi.CallFunction(cif, unsafe.Pointer(fn), unsafe.Pointer(&ctx.result), ctx.ffiArgs[:nArgs])
 
 	r1 = ctx.result
 
@@ -142,7 +142,7 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	// and completely eliminates FFI/LockOSThread overhead on successful hot paths!
 	if int32(r1) == -1 && errnoFn != 0 {
 		runtime.LockOSThread()
-		_ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ctx.errVal), nil)
+		_, _ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ctx.errVal), nil)
 		if ctx.errVal != 0 {
 			err = uintptr(*(*int32)(unsafe.Pointer(ctx.errVal)))
 		}

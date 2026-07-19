@@ -59,7 +59,7 @@ func CString(s string) *byte {
 	size := uintptr(len(s) + 1)
 	var ptr *byte
 	args := []unsafe.Pointer{unsafe.Pointer(&size)}
-	err := ffi.CallFunction(&mallocCif, unsafe.Pointer(mallocFn), unsafe.Pointer(&ptr), args)
+	_, err := ffi.CallFunction(&mallocCif, unsafe.Pointer(mallocFn), unsafe.Pointer(&ptr), args)
 	if err != nil {
 		panic(err)
 	}

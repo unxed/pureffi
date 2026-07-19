@@ -55,7 +55,7 @@ func fastCallIF(cif *types.CallInterface, cfn uintptr, ints [15]uintptr, floats 
 	}
 
 	ctx.ret = 0
-	ffi.CallFunction(cif, unsafe.Pointer(cfn), unsafe.Pointer(&ctx.ret), ctx.args[:argIdx])
+	_, _ = ffi.CallFunction(cif, unsafe.Pointer(cfn), unsafe.Pointer(&ctx.ret), ctx.args[:argIdx])
 	ret := ctx.ret
 	fastCallPool.Put(ctx)
 	return ret
