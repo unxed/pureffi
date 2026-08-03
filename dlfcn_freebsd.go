@@ -1,4 +1,4 @@
-//go:build freebsd || openbsd || netbsd || dragonfly || solaris || illumos
+//go:build (freebsd || openbsd || netbsd || dragonfly || solaris || illumos) && !arm
 
 package purego
 

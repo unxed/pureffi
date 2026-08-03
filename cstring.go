@@ -1,3 +1,5 @@
+//go:build !arm
+
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: 2026 unxed
 

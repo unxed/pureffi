@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: 2026 unxed
 
-//go:build !((amd64 || arm64) && (darwin || freebsd || linux || netbsd) && !windows)
+//go:build !((amd64 || arm64) && (darwin || freebsd || linux || netbsd) && !windows) && !arm
 
 package purego
 
