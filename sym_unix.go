@@ -54,8 +54,8 @@ func getSymbolName(addr uintptr) string {
 	var res int32
 
 	// goffi expects a pointer to the value that will be passed to C.
-	// Since C expects a pointer to the info struct, we must pass a pointer TO the uintptr containing the struct's address.
-	infoPtr := uintptr(unsafe.Pointer(&info))
+	// Since C expects a pointer to the info struct, we must pass a pointer TO the pointer containing the struct's address.
+	infoPtr := unsafe.Pointer(&info)
 
 	args := []unsafe.Pointer{
 		unsafe.Pointer(&addr),
