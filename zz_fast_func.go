@@ -5542,7 +5542,9 @@ func tryRegisterFastPath(fn reflect.Value, cif *types.CallInterface, cfn uintptr
 		switch ty.Out(0).Kind() {
 		case reflect.Uintptr, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 			reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-			reflect.Bool, reflect.Pointer, reflect.UnsafePointer, reflect.Float32, reflect.Float64:
+			reflect.Bool, reflect.Pointer, reflect.UnsafePointer:
+		case reflect.Float32, reflect.Float64:
+			return false // Fast wrappers return uintptr, which uses a different ABI register class.
 		default:
 			return false
 		}

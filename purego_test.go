@@ -292,8 +292,15 @@ func TestFloatAndBool(t *testing.T) {
 	if err == nil {
 		var floor func(float64) float64
 		purego.RegisterFunc(&floor, symFloor)
-		if res := floor(3.99); res != 3.0 {
-			t.Errorf("floor(3.99) = %f, want 3.0", res)
+		for _, tc := range []struct {
+			in, want float64
+		}{
+			{3.99, 3.0},
+			{-3.99, -4.0},
+		} {
+			if res := floor(tc.in); res != tc.want {
+				t.Errorf("floor(%v) = %f, want %v", tc.in, res, tc.want)
+			}
 		}
 	}
 }
