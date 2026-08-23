@@ -262,12 +262,12 @@ func packArg(v reflect.Value) (unsafe.Pointer, any) {
 	case reflect.String:
 		s := v.String()
 		if len(s) > 0 && s[len(s)-1] == '\x00' {
-			addr := uintptr(unsafe.Pointer(unsafe.StringData(s)))
-			return unsafe.Pointer(&addr), s
+			ptr := unsafe.Pointer(unsafe.StringData(s))
+			return unsafe.Pointer(&ptr), s
 		}
 		b := append([]byte(s), 0)
-		addr := uintptr(unsafe.Pointer(&b[0]))
-		return unsafe.Pointer(&addr), b
+		ptr := unsafe.Pointer(&b[0])
+		return unsafe.Pointer(&ptr), b
 	case reflect.Bool:
 		var b uint8
 		if v.Bool() {
@@ -281,10 +281,8 @@ func packArg(v reflect.Value) (unsafe.Pointer, any) {
 		ptr.Elem().Set(v)
 		return unsafe.Pointer(ptr.Pointer()), ptr.Interface()
 	case reflect.Pointer, reflect.UnsafePointer, reflect.Slice:
-		addr := v.Pointer()
-		ptr := new(uintptr)
-		*ptr = addr
-		return unsafe.Pointer(ptr), ptr
+		ptr := v.UnsafePointer()
+		return unsafe.Pointer(&ptr), v.Interface()
 	case reflect.Func:
 		addr := ffi.NewCallback(v.Interface())
 		ptr := new(uintptr)
@@ -296,10 +294,8 @@ func packArg(v reflect.Value) (unsafe.Pointer, any) {
 			ptr.Elem().Set(v)
 			v = ptr.Elem()
 		}
-		addr := v.UnsafeAddr()
-		ptr := new(uintptr)
-		*ptr = addr
-		return unsafe.Pointer(ptr), v.Interface()
+		ptr := v.Addr().UnsafePointer()
+		return unsafe.Pointer(&ptr), v.Interface()
 	case reflect.Struct:
 		if !v.CanAddr() {
 			ptr := reflect.New(v.Type())
@@ -330,6 +326,10 @@ func unpackRet(t reflect.Type, rvalue unsafe.Pointer, retVal reflect.Value) {
 	}
 }
 
+// cStringToGoString reads memory owned by native code. Its address crossed the
+// FFI boundary as a uintptr, so the compiler cannot see its pointer provenance.
+//
+//go:nocheckptr
 func cStringToGoString(addr uintptr) string {
 	if addr == 0 {
 		return ""
