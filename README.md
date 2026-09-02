@@ -80,10 +80,49 @@ module your_project
 
 go 1.25.5
 
-replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.6
+replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.16
 ```
 
 Once the replacement is configured, Go will automatically route all `import "github.com/ebitengine/purego"` statements to `pureffi`'s `goffi`-backed implementation. No further action is required.
+
+Pick a `pureffi` version that matches the `goffi` version you build against: `ffi.CallFunction` gained a second return value in `goffi` v0.6.0, so `pureffi` v0.1.8 and older (which pin `goffi` v0.5.3) will not compile against a v0.6.x tree.
+
+---
+
+## Universal builds: one binary for glibc and musl
+
+[goffi's Profile U](https://github.com/unxed/goffi/blob/main/docs/PROFILE_U.md) produces a single `CGO_ENABLED=0` binary that performs live FFI on both glibc and musl hosts — no C toolchain, no per-distro rebuild. `pureffi` works with it **unchanged**: it carries no `fakecgo` and emits no `//go:cgo_import_dynamic` directive of its own, so it adds no libc `SONAME` to the link and needs no build tags.
+
+This is also why `pureffi` is the right way to satisfy a `purego`-API dependency here. The usual trick for running `goffi` next to upstream `purego` — `-tags nofakecgo` — is not available in universal mode, because that tag also removes the re-exec bridge that Profile U starts up with.
+
+Profile U currently lives in the `unxed/goffi` fork, so a universal build needs two `replace` directives:
+
+```go
+module your_project
+
+go 1.25.5
+
+require (
+	github.com/ebitengine/purego v0.9.0
+	github.com/go-webgpu/goffi v0.6.2
+)
+
+replace github.com/ebitengine/purego => github.com/unxed/pureffi v0.1.16
+
+replace github.com/go-webgpu/goffi => github.com/unxed/goffi <version-with-profile-u>
+```
+
+Then build, strip the ELF interpreter, and check the contract:
+
+```bash
+CGO_ENABLED=0 go build -tags goffi_universal -o app .
+go run github.com/go-webgpu/goffi/cmd/goffi-strip-interp app
+go run github.com/go-webgpu/goffi/cmd/goffi-audit app   # no PT_INTERP, no DT_NEEDED
+```
+
+The resulting file runs as-is on Debian/Ubuntu and on Alpine. `purego.Dlopen("libc.so.6")` keeps working on musl too, because musl's loader aliases the reserved libc-family SONAMEs (`libc.so.6`, `libm.so.6`, `libpthread.so.0`, …) to itself; when the real name is needed, `goffi` reports it via `ffi.HostLibC()`, `ffi.HostLoader()` and `ffi.LibcKind()`.
+
+`cmd/universal-probe` is a ready-made smoke test for this mode: build it the same way and run the one artifact on both libcs.
 
 ---
 
