@@ -9,6 +9,18 @@ import (
 type CDecl struct{}
 type Variadic struct{}
 
+// RTLD_* are declared so that code written against the real purego API still
+// compiles on arm. goffi has no arm ABI backend yet (tracked as "pending" in
+// goffi's docs/PLATFORMS.md), so every entry point below fails at run time
+// rather than silently doing the wrong thing.
+const (
+	RTLD_DEFAULT = ^uintptr(0) - 1
+	RTLD_LAZY    = 1
+	RTLD_NOW     = 2
+	RTLD_LOCAL   = 0
+	RTLD_GLOBAL  = 0x100
+)
+
 func Dlopen(path string, mode int) (uintptr, error) {
 	return 0, errors.New("purego: Dlopen not supported on arm")
 }

@@ -1,5 +1,10 @@
 //go:build (freebsd || openbsd || netbsd || dragonfly || solaris || illumos) && !arm
 
+// This file must NOT be named dlfcn_freebsd.go. A *_GOOS.go suffix adds an
+// implicit build constraint that is ANDed with the //go:build line, so the
+// netbsd/openbsd/dragonfly/solaris/illumos alternatives above would never fire
+// and Dlopen/Dlsym/Dlclose would be undefined on every BSD except FreeBSD.
+
 package purego
 
 import (

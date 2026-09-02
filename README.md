@@ -24,6 +24,43 @@ Because `pureffi` does not include its own duplicate assembler trampolines or `f
 
 ---
 
+## Platform Support
+
+pureffi's reach is goffi's reach — everything under `CGO_ENABLED=0`.
+`scripts/check-platforms.sh` enforces this table in CI, and fails if a row
+marked *pending* starts building (which means the pinned goffi grew a backend
+and the table needs promoting).
+
+| Platform | Arch | Tier |
+|----------|------|------|
+| Linux | amd64, arm64 | full |
+| macOS | amd64, arm64 | full |
+| Windows | amd64, arm64 | full |
+| FreeBSD | amd64, arm64 | full<sup>1</sup> |
+| NetBSD | amd64, arm64 | full<sup>1,2</sup> |
+| Android | arm64 | full |
+| Windows | 386 | loader only<sup>3</sup> |
+| Linux | arm | stub<sup>4</sup> |
+| Linux | 386, loong64, ppc64le, riscv64, s390x | pending<sup>5</sup> |
+
+**Tiers:** *full* = `Dlopen`/`Dlsym` + `RegisterFunc`/`RegisterLibFunc` +
+`NewCallback` + `SyscallN`. *loader only* = `Dlopen`/`Dlsym`/`NewCallback` work,
+`RegisterFunc` fails at run time. *stub* = compiles, every entry point fails at
+run time.
+
+1. Needs `-gcflags="github.com/go-webgpu/goffi/internal/fakecgo=-std"`.
+2. Requires a goffi release that carries NetBSD support; until `go.mod` is
+   bumped these two rows are tracked as pending.
+3. goffi has no 386 ABI backend, mirroring purego's own windows/386 shape.
+4. Provided by `stub_arm.go` so downstream code still compiles.
+5. Tracked in goffi's `ROADMAP.md`, "Architecture Expansion". Each needs a
+   per-arch call trampoline, errno capture and fakecgo bring-up.
+
+purego's iOS and Android amd64/386/arm targets are `CGO_ENABLED=1`-only and are
+out of scope for a zero-CGO library.
+
+---
+
 ## Features
 
 - **1:1 API Compatibility**: Works as a drop-in replacement via Go's `replace` directive. You do not need to change a single import statement in your existing codebase.

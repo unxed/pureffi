@@ -1,0 +1,137 @@
+name: CI
+
+# pureffi is a drop-in purego API implemented on top of goffi, so its platform
+# reach is goffi's platform reach. scripts/check-platforms.sh owns that table
+# and fails both ways: a "full" target that stops building, and a "pending"
+# target that starts building (which means the pinned goffi grew a backend and
+# the table needs promoting).
+#
+# Everything here runs with CGO_ENABLED=0 by default — that is the whole point
+# of the library. The test job also runs CGO_ENABLED=1 to prove the cgo path
+# stays intact for consumers who already link C libraries.
+
+on:
+  push:
+    branches: [main, develop, 'feature/**', 'release/**', 'hotfix/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      goffi_replace:
+        description: 'Override the goffi dependency (path, or module@version/branch)'
+        required: false
+        default: ''
+
+env:
+  GO_VERSION: '1.26.x'
+
+jobs:
+  formatting:
+    name: Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - name: Check gofmt
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "ERROR: the following files are not formatted:"
+            gofmt -l .
+            echo ""
+            echo "Run 'go fmt ./...' to fix."
+            exit 1
+          fi
+          echo "All files are properly formatted ✓"
+
+  vet:
+    name: Vet
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - run: go mod download
+      - run: go mod verify
+      # unsafeptr is off by design: pureffi hands raw dlsym/dlopen results
+      # across the Go/C boundary, which is exactly what that check flags.
+      - run: go vet -unsafeptr=false ./...
+
+  platform-matrix:
+    name: Platform Matrix
+    runs-on: ubuntu-latest
+    needs: [formatting, vet]
+    env:
+      CGO_ENABLED: 0
+      GOFFI_REPLACE: ${{ github.event.inputs.goffi_replace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - name: Check platform matrix
+        run: scripts/check-platforms.sh
+
+  test:
+    name: Test - ${{ matrix.os }} (cgo=${{ matrix.cgo }})
+    runs-on: ${{ matrix.os }}
+    needs: [formatting, vet]
+    env:
+      CGO_ENABLED: ${{ matrix.cgo }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        cgo: ['0', '1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+      - run: go mod download
+      - name: Run tests
+        shell: bash
+        run: go test -v ./...
+
+  benchmarks:
+    name: Benchmarks
+    runs-on: ubuntu-latest
+    needs: [formatting, vet]
+    env:
+      CGO_ENABLED: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - name: Run benchmarks
+        run: go test -bench=. -benchmem -run=^$ . | tee bench.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmarks
+          path: bench.txt
+          retention-days: 30
+
+  ci-success:
+    name: CI Success
+    needs: [formatting, vet, platform-matrix, test, benchmarks]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - run: |
+          echo "✅ Formatting: PASSED"
+          echo "✅ Vet: PASSED"
+          echo "✅ Platform Matrix: PASSED"
+          echo "✅ Tests: PASSED (Linux, Windows, macOS; cgo=0 and cgo=1)"
+          echo "✅ Benchmarks: PASSED"
+          echo "🚀 Ready for merge!"
