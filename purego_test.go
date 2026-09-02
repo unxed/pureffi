@@ -10,6 +10,33 @@ import (
 	"github.com/ebitengine/purego"
 )
 
+// What a callback may look like is not the same everywhere, and it is narrower
+// than what the rest of the API allows.
+//
+// purego documents the portable contract for NewCallback as "zero or one
+// uintptr-sized result" with no argument "larger than the size of uintptr" --
+// on Windows because both purego and pureffi hand the function to
+// syscall.NewCallback, which accepts nothing else. goffi goes beyond that on
+// Unix (floats in registers, and struct-by-value arguments on amd64), which is
+// worth testing where it exists; these two helpers mark where it does, so a
+// platform that legitimately cannot do it skips out loud instead of panicking
+// inside NewCallback.
+
+func skipWithoutFloatCallbacks(t *testing.T) {
+	t.Helper()
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows callbacks go through syscall.NewCallback: uintptr-sized arguments and result only, no floats")
+	}
+}
+
+func skipWithoutStructCallbacks(t *testing.T) {
+	t.Helper()
+	skipWithoutFloatCallbacks(t)
+	if runtime.GOARCH != "amd64" {
+		t.Skip("goffi implements struct-by-value callback arguments on amd64 only")
+	}
+}
+
 func getLibc() string {
 	switch runtime.GOOS {
 	case "darwin":
@@ -140,9 +167,14 @@ func TestSliceAsPointer(t *testing.T) {
 	var qsort func(base []int32, num uintptr, size uintptr, compar uintptr)
 	purego.RegisterLibFunc(&qsort, handle, "qsort")
 
-	// Create a callback for qsort
-	compar := func(a, b *int32) int32 {
-		return *a - *b
+	// Create a callback for qsort.
+	//
+	// The comparator returns int, not int32. C's qsort wants an int, and on
+	// every architecture pureffi supports Go's int is uintptr-sized, which is
+	// the only result width a Windows callback can have; the C side reads the
+	// low half of the return register either way.
+	compar := func(a, b *int32) int {
+		return int(*a) - int(*b)
 	}
 	cb := purego.NewCallback(compar)
 
@@ -168,9 +200,10 @@ func TestCallbackWithCDecl(t *testing.T) {
 	var qsort func(base []int32, num uintptr, size uintptr, compar uintptr)
 	purego.RegisterLibFunc(&qsort, handle, "qsort")
 
-	// We create a callback for qsort, but this time WITH purego.CDecl
-	compar := func(_ purego.CDecl, a, b *int32) int32 {
-		return *a - *b
+	// We create a callback for qsort, but this time WITH purego.CDecl.
+	// int result, for the reason given in TestSliceAsPointer.
+	compar := func(_ purego.CDecl, a, b *int32) int {
+		return int(*a) - int(*b)
 	}
 	cb := purego.NewCallback(compar)
 
@@ -215,9 +248,53 @@ func TestStructReturn(t *testing.T) {
 // It registers a complex Go callback, wraps it into a C-callable function pointer,
 // and then calls it via RegisterFunc. This validates:
 // 1. Stack spilling (lots of arguments).
-// 2. Structs passed by value (with mixed float/int).
-// 3. Nested structs.
+// 2. Mixed integer and float arguments in and out of registers.
+//
+// Struct-by-value arguments are the same round trip with one more thing in it,
+// and goffi supports them on fewer platforms, so they live in
+// TestFullCircleFFIStruct below rather than costing this test its coverage
+// everywhere else.
 func TestFullCircleFFI(t *testing.T) {
+	skipWithoutFloatCallbacks(t)
+
+	// 1. Define our target function in Go. It takes enough arguments to force
+	// stack spilling on all architectures.
+	target := func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, i int, j float64) float64 {
+		// Do some math to prove values arrived intact
+		return float64(a+c+e+g+i) + b + d + f + h + j
+	}
+
+	// 2. Convert it to a C function pointer (tests goffi callback creation).
+	cptr := purego.NewCallback(target)
+
+	// 3. Bind it back to a Go variable (tests goffi dynamic call interface).
+	var boundFunc func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, i int, j float64) float64
+	purego.RegisterFunc(&boundFunc, cptr)
+
+	// 4. Call it! (Go -> FFI Caller -> ASM Trampoline -> Callback Dispatcher -> Target Go Func)
+	res := boundFunc(1, 1.1, 2, 2.2, 3, 3.3, 4, 4.4, 5, 5.5)
+	expected := float64(1+2+3+4+5) + 1.1 + 2.2 + 3.3 + 4.4 + 5.5
+
+	if res != expected {
+		t.Errorf("FullCircle FFI failed! Expected %f, got %f", expected, res)
+	} else {
+		t.Logf("FullCircle FFI succeeded: %f == %f", res, expected)
+	}
+}
+
+// TestFullCircleFFIStruct is the same round trip carrying a nested struct by
+// value, which exercises the argument classification the plain full-circle
+// test does not: a struct of four float32s is one 16-byte aggregate to the
+// ABI, not four arguments.
+//
+// This is goffi's own extension rather than part of the purego API -- purego
+// documents callback arguments as never larger than a uintptr -- and goffi
+// classifies aggregates for callbacks on amd64 only. On arm64 NewCallback
+// rejects the signature outright ("unsupported callback argument type:
+// struct"), so the test skips there instead of taking the panic with it.
+func TestFullCircleFFIStruct(t *testing.T) {
+	skipWithoutStructCallbacks(t)
+
 	type Point struct {
 		X, Y float32
 	}
@@ -226,22 +303,15 @@ func TestFullCircleFFI(t *testing.T) {
 		BottomRight Point
 	}
 
-	// 1. Define our target function in Go.
-	// It takes enough arguments to force stack spilling on all architectures,
-	// and takes a complex nested struct by value.
 	target := func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, r Rect) float64 {
-		// Do some math to prove values arrived intact
 		return float64(a+c+e+g) + b + d + f + h + float64(r.TopLeft.X+r.BottomRight.Y)
 	}
 
-	// 2. Convert it to a C function pointer (tests goffi callback creation).
 	cptr := purego.NewCallback(target)
 
-	// 3. Bind it back to a Go variable (tests goffi dynamic call interface).
 	var boundFunc func(a int, b float64, c int, d float64, e int, f float64, g int, h float64, r Rect) float64
 	purego.RegisterFunc(&boundFunc, cptr)
 
-	// 4. Call it! (Go -> FFI Caller -> ASM Trampoline -> Callback Dispatcher -> Target Go Func)
 	rect := Rect{
 		TopLeft:     Point{X: 10.5, Y: 0},
 		BottomRight: Point{X: 0, Y: 5.25},
@@ -251,9 +321,9 @@ func TestFullCircleFFI(t *testing.T) {
 	expected := float64(1+2+3+4) + 1.1 + 2.2 + 3.3 + 4.4 + 10.5 + 5.25
 
 	if res != expected {
-		t.Errorf("FullCircle FFI failed! Expected %f, got %f", expected, res)
+		t.Errorf("FullCircle FFI with struct failed! Expected %f, got %f", expected, res)
 	} else {
-		t.Logf("FullCircle FFI succeeded: %f == %f", res, expected)
+		t.Logf("FullCircle FFI with struct succeeded: %f == %f", res, expected)
 	}
 }
 
