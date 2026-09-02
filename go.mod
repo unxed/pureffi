@@ -4,4 +4,4 @@ go 1.25.5
 
 require github.com/go-webgpu/goffi v0.6.2
 
-replace github.com/go-webgpu/goffi => github.com/unxed/goffi v0.1.6
+replace github.com/go-webgpu/goffi => github.com/unxed/goffi v0.1.7
