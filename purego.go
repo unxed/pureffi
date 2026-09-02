@@ -3,10 +3,10 @@
 package purego
 
 import (
-	"sync"
 	"reflect"
 	"runtime"
 	"strings"
+	"sync"
 	"unsafe"
 
 	"github.com/go-webgpu/goffi/ffi"
