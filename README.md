@@ -49,8 +49,8 @@ and the table needs promoting).
 run time.
 
 1. Needs `-gcflags="github.com/go-webgpu/goffi/internal/fakecgo=-std"`.
-2. Requires a goffi release that carries NetBSD support; until `go.mod` is
-   bumped these two rows are tracked as pending.
+2. Needs a goffi release carrying NetBSD support, which the pinned one does;
+   `scripts/check-platforms.sh` fails if that stops being true.
 3. goffi has no 386 ABI backend, mirroring purego's own windows/386 shape.
 4. Provided by `stub_arm.go` so downstream code still compiles.
 5. Tracked in goffi's `ROADMAP.md`, "Architecture Expansion". Each needs a

@@ -50,16 +50,11 @@ TARGETS=(
   "windows/arm64|full|"
   "freebsd/amd64|full|${FAKECGO_STD}"
   "freebsd/arm64|full|${FAKECGO_STD}"
-  # NetBSD is implemented in goffi but not in the release go.mod currently
-  # pins. Left as "pending" on purpose: the stale-detector below fails the
-  # build the moment the pinned goffi grows NetBSD, which is the reminder to
-  # flip these two rows to "full".
-  # NetBSD lands in goffi but is not in the pinned release yet. The "pending"
-  # tier is deliberate: the STALE check below fires the moment go.mod is
-  # bumped to a goffi that carries NetBSD, which is the reminder to promote
-  # these two rows to "full" here and in README.md.
-  "netbsd/amd64|pending|${FAKECGO_STD}"
-  "netbsd/arm64|pending|${FAKECGO_STD}"
+  # NetBSD is carried by the pinned goffi release, so these are full like the
+  # other BSD rows. They were "pending" until go.mod caught up; the STALE
+  # check below is what noticed and failed the build.
+  "netbsd/amd64|full|${FAKECGO_STD}"
+  "netbsd/arm64|full|${FAKECGO_STD}"
   "android/arm64|full|"
 
   "windows/386|load|"
