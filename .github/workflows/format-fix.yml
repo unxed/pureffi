@@ -1,6 +1,7 @@
 name: Temporary Format Fix
 on:
-  workflow_dispatch:
+  push:
+    branches: [codex/coverage-batch1]
 permissions:
   contents: write
 jobs:
