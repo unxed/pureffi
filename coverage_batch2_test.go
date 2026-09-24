@@ -78,7 +78,10 @@ func TestGoTypeToFfiTypeArray(t *testing.T) {
 }
 
 func TestGoTypeToFfiTypeStruct(t *testing.T) {
-	type pair struct{ A int32; B float64 }
+	type pair struct {
+		A int32
+		B float64
+	}
 	got := goTypeToFfiType(reflect.TypeOf(pair{}))
 	if got.Kind != types.StructType || len(got.Members) != 2 || got.Size == 0 {
 		t.Fatalf("struct descriptor = %#v", got)
