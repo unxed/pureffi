@@ -1,6 +1,6 @@
 package strings
 
-import "testing"
+import (\n\t"testing"\n\t"unsafe"\n)
 
 func TestHasSuffixExact(t *testing.T) {
 	if !hasSuffix("alpha", "alpha") {
