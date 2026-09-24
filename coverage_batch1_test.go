@@ -17,9 +17,9 @@ func TestDlerrorErrorString(t *testing.T) {
 
 func TestGoTypeToFfiTypePrimitives(t *testing.T) {
 	cases := []struct {
-		name string
+		name  string
 		value any
-		want *types.TypeDescriptor
+		want  *types.TypeDescriptor
 	}{
 		{name: "int8", value: int8(0), want: types.SInt8TypeDescriptor},
 		{name: "uint8", value: uint8(0), want: types.UInt8TypeDescriptor},
