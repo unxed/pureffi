@@ -12,7 +12,7 @@ import (
 
 func TestPackArgString(t *testing.T) {
 	got, kept := packArg(reflect.ValueOf("hello"))
-	if kept != "hello" {
+	if buffer, ok := kept.([]byte); !ok || string(buffer) != "hello\x00" {
 		t.Fatalf("kept value = %#v", kept)
 	}
 	ptr := *(*unsafe.Pointer)(got)
@@ -57,8 +57,9 @@ func TestPackArgPointer(t *testing.T) {
 
 func TestPackArgArray(t *testing.T) {
 	got, kept := packArg(reflect.ValueOf([2]byte{1, 2}))
-	if _, ok := kept.([2]byte); !ok || *(*byte)(got) != 1 {
-		t.Fatalf("packed array starts with %d, kept %#v", *(*byte)(got), kept)
+	ptr := *(*unsafe.Pointer)(got)
+	if _, ok := kept.([2]byte); !ok || *(*byte)(ptr) != 1 {
+		t.Fatalf("packed array starts with %d, kept %#v", *(*byte)(ptr), kept)
 	}
 }
 
