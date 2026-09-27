@@ -18,12 +18,32 @@ func BenchmarkFastPath(b *testing.B) {
 	}
 	defer purego.Dlclose(libc)
 
-	var abs func(int32) int32
+	// int, not int32: only pointer-sized arguments take the fast path.
+	var abs func(int) int
 	purego.RegisterLibFunc(&abs, libc, "abs")
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = abs(-1)
+	}
+}
+
+// BenchmarkFastPathPointer is the fast path with a pointer argument, which the
+// wrapper takes as an unsafe.Pointer so the GC keeps its object alive.
+func BenchmarkFastPathPointer(b *testing.B) {
+	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		b.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(libc)
+
+	var strlen func(*byte) uintptr
+	purego.RegisterLibFunc(&strlen, libc, "strlen")
+	s := []byte("benchmark\x00")
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = strlen(&s[0])
 	}
 }
 
