@@ -61,1478 +61,5267 @@ func fastCallIF(cif *types.CallInterface, cfn uintptr, ints [15]uintptr, floats 
 	return ret
 }
 
-// registerFastFunc sets fn to a zero-allocation closure
-func registerFastFunc(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numArgs int, hasReturn bool) {
-	switch numArgs {
-	case 0:
-		if hasReturn {
-			impl := func() uintptr {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func() {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 1:
-		if hasReturn {
-			impl := func(a1 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 2:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 3:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 4:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 5:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 6:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 7:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 8:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 9:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 10:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 11:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 12:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 13:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 14:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 15:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, a15 uintptr) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				ints[14] = a15
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, a15 uintptr) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				ints[14] = a15
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
+// fastWord is the type of an integer-class argument of a fast wrapper.
+//
+// The wrapper is installed under the registered function's own type
+// (forceFuncPtr), so its parameters must match that type slot for slot in
+// the GC's eyes: a pointer argument has to arrive as a pointer, or the GC
+// neither keeps its object alive for the duration of the C call nor adjusts
+// it when the stack moves. Each wrapper below is therefore generic over
+// uintptr and unsafe.Pointer per argument, and tryRegisterFastPath picks the
+// instantiation whose pointer slots match the registered signature.
+type fastWord interface{ uintptr | unsafe.Pointer }
+
+func fastInts0R(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func() uintptr {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		return r
 	}
+	forceFuncPtr(fn, &impl)
 }
 
-// registerFastFuncFloat32x1 handles N int args + 1 trailing float.
-func registerFastFuncFloat32x1(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numInts int, hasReturn bool) {
-	switch numInts {
-	case 0:
-		if hasReturn {
-			impl := func(f1 float32) uintptr {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(f1 float32) {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 1:
-		if hasReturn {
-			impl := func(a1 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 2:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 3:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 4:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 5:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 6:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 7:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 8:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 9:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 10:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 11:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 12:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 13:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 14:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, f1 float32) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, f1 float32) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float32bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
+func fastInts0V(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func() {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
 	}
+	forceFuncPtr(fn, &impl)
 }
 
-// registerFastFuncFloat64x1 handles N int args + 1 trailing float.
-func registerFastFuncFloat64x1(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numInts int, hasReturn bool) {
-	switch numInts {
+func fastInts1R[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts1V[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2R[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2V[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3R[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3V[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4R[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4V[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5R[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5V[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6R[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6V[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7R[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7V[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8R[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8V[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9R[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9V[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts15R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, a15 A15) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		ints[14] = uintptr(a15)
+		var floats [8]uintptr
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+		runtime.KeepAlive(a15)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts15V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, a15 A15) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		ints[14] = uintptr(a15)
+		var floats [8]uintptr
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+		runtime.KeepAlive(a15)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts0F32R(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(f1 float32) uintptr {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts0F32V(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(f1 float32) {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts1F32R[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts1F32V[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2F32R[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2F32V[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3F32R[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3F32V[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4F32R[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4F32V[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5F32R[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5F32V[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6F32R[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6F32V[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7F32R[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7F32V[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8F32R[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8F32V[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14F32R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, f1 float32) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14F32V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, f1 float32) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float32bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts0F64R(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(f1 float64) uintptr {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts0F64V(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(f1 float64) {
+		var ints [15]uintptr
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts1F64R[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts1F64V[A1 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2F64R[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts2F64V[A1, A2 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3F64R[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts3F64V[A1, A2, A3 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4F64R[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts4F64V[A1, A2, A3, A4 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5F64R[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts5F64V[A1, A2, A3, A4, A5 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6F64R[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts6F64V[A1, A2, A3, A4, A5, A6 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7F64R[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts7F64V[A1, A2, A3, A4, A5, A6, A7 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8F64R[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts8F64V[A1, A2, A3, A4, A5, A6, A7, A8 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts9F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts10F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts11F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts12F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts13F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14F64R[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, f1 float64) uintptr {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		r := fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+		return r
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+func fastInts14F64V[A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14 fastWord](fn reflect.Value, cif *types.CallInterface, cfn uintptr) {
+	impl := func(a1 A1, a2 A2, a3 A3, a4 A4, a5 A5, a6 A6, a7 A7, a8 A8, a9 A9, a10 A10, a11 A11, a12 A12, a13 A13, a14 A14, f1 float64) {
+		var ints [15]uintptr
+		ints[0] = uintptr(a1)
+		ints[1] = uintptr(a2)
+		ints[2] = uintptr(a3)
+		ints[3] = uintptr(a4)
+		ints[4] = uintptr(a5)
+		ints[5] = uintptr(a6)
+		ints[6] = uintptr(a7)
+		ints[7] = uintptr(a8)
+		ints[8] = uintptr(a9)
+		ints[9] = uintptr(a10)
+		ints[10] = uintptr(a11)
+		ints[11] = uintptr(a12)
+		ints[12] = uintptr(a13)
+		ints[13] = uintptr(a14)
+		var floats [8]uintptr
+		floats[0] = uintptr(math.Float64bits(f1))
+		fastCallIF(cif, cfn, ints, floats)
+		runtime.KeepAlive(a1)
+		runtime.KeepAlive(a2)
+		runtime.KeepAlive(a3)
+		runtime.KeepAlive(a4)
+		runtime.KeepAlive(a5)
+		runtime.KeepAlive(a6)
+		runtime.KeepAlive(a7)
+		runtime.KeepAlive(a8)
+		runtime.KeepAlive(a9)
+		runtime.KeepAlive(a10)
+		runtime.KeepAlive(a11)
+		runtime.KeepAlive(a12)
+		runtime.KeepAlive(a13)
+		runtime.KeepAlive(a14)
+	}
+	forceFuncPtr(fn, &impl)
+}
+
+// registerFastFunc sets fn to a zero-allocation wrapper whose parameter types
+// match the registered signature, and reports whether one was generated for
+// it. See fastWord.
+func registerFastFunc(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numInts int, ptrMask uint32, floatBits int, hasReturn bool) bool {
+	switch floatBits {
 	case 0:
-		if hasReturn {
-			impl := func(f1 float64) uintptr {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		switch numInts {
+		case 0:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts0R(fn, cif, cfn)
+				} else {
+					fastInts0V(fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(f1 float64) {
-				var ints [15]uintptr
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 1:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts1R[uintptr](fn, cif, cfn)
+				} else {
+					fastInts1V[uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts1R[unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts1V[unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
+		case 2:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts2R[uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2V[uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts2R[unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2V[unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts2R[uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2V[uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts2R[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2V[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 3:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts3R[uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3V[uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts3R[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3V[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts3R[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3V[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts3R[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3V[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts3R[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3V[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts3R[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3V[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts3R[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3V[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts3R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 4:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts4R[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts4R[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts4R[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts4R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts4R[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts4R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts4R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts4R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts4R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 5:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts5R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts5R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts5R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 6:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 32:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 33:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 34:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 35:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 36:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 37:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 38:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 39:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 40:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 41:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 42:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 43:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 44:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 45:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 46:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 47:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 48:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 49:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 50:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 51:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 52:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 53:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 54:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 55:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 56:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 57:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 58:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 59:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 60:
+				if hasReturn {
+					fastInts6R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 61:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 62:
+				if hasReturn {
+					fastInts6R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 63:
+				if hasReturn {
+					fastInts6R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 7:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts7R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts7V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 8:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts8R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts8V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 9:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts9R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts9V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 10:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts10R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts10V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 11:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts11R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts11V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 12:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts12R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts12V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 13:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts13R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts13V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 14:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts14R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts14V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 15:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts15R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts15V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
 		}
-	case 1:
-		if hasReturn {
-			impl := func(a1 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+	case 32:
+		switch numInts {
+		case 0:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts0F32R(fn, cif, cfn)
+				} else {
+					fastInts0F32V(fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 1:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts1F32R[uintptr](fn, cif, cfn)
+				} else {
+					fastInts1F32V[uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts1F32R[unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts1F32V[unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
+		case 2:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts2F32R[uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2F32V[uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts2F32R[unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2F32V[unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts2F32R[uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2F32V[uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts2F32R[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2F32V[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 3:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts3F32R[uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F32V[uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts3F32R[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F32V[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts3F32R[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F32V[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts3F32R[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F32V[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts3F32R[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F32V[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts3F32R[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F32V[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts3F32R[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F32V[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts3F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 4:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts4F32R[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts4F32R[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts4F32R[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts4F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts4F32R[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts4F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts4F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts4F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts4F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 5:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts5F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts5F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts5F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 6:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 32:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 33:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 34:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 35:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 36:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 37:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 38:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 39:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 40:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 41:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 42:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 43:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 44:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 45:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 46:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 47:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 48:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 49:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 50:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 51:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 52:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 53:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 54:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 55:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 56:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 57:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 58:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 59:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 60:
+				if hasReturn {
+					fastInts6F32R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 61:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 62:
+				if hasReturn {
+					fastInts6F32R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 63:
+				if hasReturn {
+					fastInts6F32R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F32V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			}
+		case 7:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts7F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts7F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 8:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts8F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts8F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 9:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts9F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts9F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 10:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts10F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts10F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 11:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts11F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts11F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 12:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts12F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts12F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 13:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts13F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts13F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
+		case 14:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts14F32R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts14F32V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			}
 		}
-	case 2:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+	case 64:
+		switch numInts {
+		case 0:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts0F64R(fn, cif, cfn)
+				} else {
+					fastInts0F64V(fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 1:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts1F64R[uintptr](fn, cif, cfn)
+				} else {
+					fastInts1F64V[uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts1F64R[unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts1F64V[unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 3:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 2:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts2F64R[uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2F64V[uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts2F64R[unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts2F64V[unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts2F64R[uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2F64V[uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts2F64R[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts2F64V[unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 3:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts3F64R[uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F64V[uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts3F64R[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F64V[unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts3F64R[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F64V[uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts3F64R[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts3F64V[unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts3F64R[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F64V[uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts3F64R[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F64V[unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts3F64R[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F64V[uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts3F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts3F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 4:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 4:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts4F64R[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts4F64R[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts4F64R[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts4F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts4F64R[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts4F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts4F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts4F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts4F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts4F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 5:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts5F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts5F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts5F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts5F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 5:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 6:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 1:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 2:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 3:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 4:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 5:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 6:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 7:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 8:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 9:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 10:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 11:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 12:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 13:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 14:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 15:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 16:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 17:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 18:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 19:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 20:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 21:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 22:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 23:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 24:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 25:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 26:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 27:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 28:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 29:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 30:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 31:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr](fn, cif, cfn)
+				}
+				return true
+			case 32:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 33:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 34:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 35:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 36:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 37:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 38:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 39:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 40:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 41:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 42:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 43:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 44:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 45:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 46:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 47:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 48:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 49:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 50:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 51:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 52:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 53:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 54:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 55:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 56:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 57:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 58:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 59:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 60:
+				if hasReturn {
+					fastInts6F64R[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 61:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 62:
+				if hasReturn {
+					fastInts6F64R[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[uintptr, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
+			case 63:
+				if hasReturn {
+					fastInts6F64R[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				} else {
+					fastInts6F64V[unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 7:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts7F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts7F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 6:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 8:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts8F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts8F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 9:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts9F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts9F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 7:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 10:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts10F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts10F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 11:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts11F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts11F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 8:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 12:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts12F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts12F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
+		case 13:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts13F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts13F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 9:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
+		case 14:
+			switch ptrMask {
+			case 0:
+				if hasReturn {
+					fastInts14F64R[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				} else {
+					fastInts14F64V[uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr, uintptr](fn, cif, cfn)
+				}
+				return true
 			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 10:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 11:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 12:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 13:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-	case 14:
-		if hasReturn {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, f1 float64) uintptr {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func(a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, f1 float64) {
-				var ints [15]uintptr
-				ints[0] = a1
-				ints[1] = a2
-				ints[2] = a3
-				ints[3] = a4
-				ints[4] = a5
-				ints[5] = a6
-				ints[6] = a7
-				ints[7] = a8
-				ints[8] = a9
-				ints[9] = a10
-				ints[10] = a11
-				ints[11] = a12
-				ints[12] = a13
-				ints[13] = a14
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float64bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
 		}
 	}
+	return false
 }
 func registerFastFuncInterleavedFloat32x1(fn reflect.Value, cif *types.CallInterface, cfn uintptr, totalArgs, floatPos int, hasReturn bool) {
 	switch totalArgs {
@@ -5510,17 +9299,32 @@ func tryRegisterFastPath(fn reflect.Value, cif *types.CallInterface, cfn uintptr
 	}
 
 	var numFloats, numInts int
+	var ptrMask uint32
 	trailingFloats := true
 	seenFloat := false
 	floatPos := -1
 
 	for i := 0; i < numIn; i++ {
 		switch ty.In(i).Kind() {
-		case reflect.Uintptr, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
-			reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-			reflect.Bool, reflect.Pointer, reflect.UnsafePointer:
+		// The fast wrappers take every integer argument as a uintptr, and
+		// forceFuncPtr installs them under fn's own type. Go's register ABI
+		// lets the callee spill its register arguments into a spill area the
+		// caller reserves and lays out from the declared type, so the two
+		// layouts must agree slot for slot. A narrower argument (int32, bool,
+		// ...) packs tighter in the caller's area than a uintptr does in the
+		// wrapper's: the wrapper then spills past the end of that area over
+		// the caller's own frame, and the GC later finds an integer where the
+		// caller keeps a pointer ("invalid pointer found on stack"). Only
+		// pointer-sized arguments share the layout, so anything narrower
+		// takes the reflect path.
+		case reflect.Uintptr, reflect.Uint, reflect.Uint64,
+			reflect.Int, reflect.Int64,
+			reflect.Pointer, reflect.UnsafePointer:
 			if seenFloat {
 				trailingFloats = false
+			}
+			if k := ty.In(i).Kind(); k == reflect.Pointer || k == reflect.UnsafePointer {
+				ptrMask |= 1 << numInts
 			}
 			numInts++
 		case reflect.Float32, reflect.Float64:
@@ -5551,18 +9355,17 @@ func tryRegisterFastPath(fn reflect.Value, cif *types.CallInterface, cfn uintptr
 	}
 
 	if numFloats == 0 {
-		registerFastFunc(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 0, hasReturn)
 	}
 	if numFloats == 1 && trailingFloats && ty.In(numInts).Kind() == reflect.Float32 {
-		registerFastFuncFloat32x1(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 32, hasReturn)
 	}
 	if numFloats == 1 && trailingFloats && ty.In(numInts).Kind() == reflect.Float64 {
-		registerFastFuncFloat64x1(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 64, hasReturn)
 	}
-	if numFloats == 1 && !trailingFloats && ty.In(floatPos).Kind() == reflect.Float32 {
+	// The interleaved wrappers take every integer argument as a uintptr, so
+	// they only fit signatures without pointers (see fastWord).
+	if numFloats == 1 && !trailingFloats && ptrMask == 0 && ty.In(floatPos).Kind() == reflect.Float32 {
 		registerFastFuncInterleavedFloat32x1(fn, cif, cfn, numIn, floatPos, hasReturn)
 		return true
 	}

@@ -34,9 +34,8 @@ var patterns = []fastPattern{
 func main() {
 	var buf bytes.Buffer
 	execTemplate(&buf, "header", tmplHeader, nil)
-	emitIntOnly(&buf)
-	emitTrailingFloat(&buf, 32)
-	emitTrailingFloat(&buf, 64)
+	emitWrappers(&buf)
+	emitDispatch(&buf)
 	emitInterleavedFloat32x1(&buf)
 	execTemplate(&buf, "tryRegister", tmplTryRegisterFastPath, nil)
 
@@ -141,96 +140,138 @@ func fastCallIF(cif *types.CallInterface, cfn uintptr, ints [15]uintptr, floats 
 }
 `
 
-var tmplIntOnly = `// registerFastFunc sets fn to a zero-allocation closure
-func registerFastFunc(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numArgs int, hasReturn bool) {
-	switch numArgs {
-{{- range .}}
-	case {{.N}}:
-		if hasReturn {
-			impl := func({{.Params}}) uintptr {
-				var ints [15]uintptr
-				{{- range $i := seq .N}}
-				ints[{{$i}}] = a{{add $i 1}}
-				{{- end}}
-				var floats [8]uintptr
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func({{.Params}}) {
-				var ints [15]uintptr
-				{{- range $i := seq .N}}
-				ints[{{$i}}] = a{{add $i 1}}
-				{{- end}}
-				var floats [8]uintptr
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		}
-{{- end}}
-	}
-}
+// maxPointerMaskArgs bounds the integer argument counts for which a wrapper is
+// generated for every mix of pointer and non-pointer arguments: that is 2^n
+// instantiations per count. Longer signatures with a pointer among their
+// arguments take the reflect path; without one they still get a fast wrapper.
+const maxPointerMaskArgs = 6
+
+var tmplFastWord = `
+// fastWord is the type of an integer-class argument of a fast wrapper.
+//
+// The wrapper is installed under the registered function's own type
+// (forceFuncPtr), so its parameters must match that type slot for slot in
+// the GC's eyes: a pointer argument has to arrive as a pointer, or the GC
+// neither keeps its object alive for the duration of the C call nor adjusts
+// it when the stack moves. Each wrapper below is therefore generic over
+// uintptr and unsafe.Pointer per argument, and tryRegisterFastPath picks the
+// instantiation whose pointer slots match the registered signature.
+type fastWord interface{ uintptr | unsafe.Pointer }
 `
 
-func emitIntOnly(buf *bytes.Buffer) {
-	type caseData struct {
-		N      int
-		Params string
-	}
-	var cases []caseData
-	for n := 0; n <= 15; n++ {
-		cases = append(cases, caseData{N: n, Params: funcs["argList"].(func(int) string)(n)})
-	}
-	execTemplate(buf, "intOnly", tmplIntOnly, cases)
-}
-
-var tmplTrailingFloat = `// registerFastFuncFloat{{.Bits}}x1 handles N int args + 1 trailing float.
-func registerFastFuncFloat{{.Bits}}x1(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numInts int, hasReturn bool) {
-	switch numInts {
-{{- range .Cases}}
-	case {{.N}}:
-		if hasReturn {
-			impl := func({{.Params}}{{if .Params}}, {{end}}f1 float{{$.Bits}}) uintptr {
-				var ints [15]uintptr
-				{{- range $i := seq .N}}
-				ints[{{$i}}] = a{{add $i 1}}
-				{{- end}}
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float{{$.Bits}}bits(f1))
-				return fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
-		} else {
-			impl := func({{.Params}}{{if .Params}}, {{end}}f1 float{{$.Bits}}) {
-				var ints [15]uintptr
-				{{- range $i := seq .N}}
-				ints[{{$i}}] = a{{add $i 1}}
-				{{- end}}
-				var floats [8]uintptr
-				floats[0] = uintptr(math.Float{{$.Bits}}bits(f1))
-				fastCallIF(cif, cfn, ints, floats)
-			}
-			forceFuncPtr(fn, &impl)
+// emitWrappers writes one generic wrapper per integer argument count, float
+// suffix and return shape: fastInts{N}{Float}{R|V}.
+func emitWrappers(buf *bytes.Buffer) {
+	buf.WriteString(tmplFastWord)
+	for _, bits := range []int{0, 32, 64} {
+		maxInts := 15
+		if bits != 0 {
+			maxInts = 14
 		}
-{{- end}}
+		for n := 0; n <= maxInts; n++ {
+			for _, ret := range []bool{true, false} {
+				emitWrapper(buf, n, bits, ret)
+			}
+		}
 	}
 }
-`
 
-func emitTrailingFloat(buf *bytes.Buffer, bits int) {
-	type caseData struct {
-		N      int
-		Params string
+func wrapperName(n, bits int, ret bool) string {
+	name := fmt.Sprintf("fastInts%d", n)
+	if bits != 0 {
+		name += fmt.Sprintf("F%d", bits)
 	}
-	type rootData struct {
-		Bits  int
-		Cases []caseData
+	if ret {
+		return name + "R"
 	}
-	var cases []caseData
-	for n := 0; n <= 14; n++ {
-		cases = append(cases, caseData{N: n, Params: funcs["argList"].(func(int) string)(n)})
+	return name + "V"
+}
+
+func emitWrapper(buf *bytes.Buffer, n, bits int, ret bool) {
+	var typeParams, params []string
+	for i := 1; i <= n; i++ {
+		typeParams = append(typeParams, fmt.Sprintf("A%d", i))
+		params = append(params, fmt.Sprintf("a%d A%d", i, i))
 	}
-	execTemplate(buf, fmt.Sprintf("trailingFloat%d", bits), tmplTrailingFloat, rootData{Bits: bits, Cases: cases})
+	if bits != 0 {
+		params = append(params, fmt.Sprintf("f1 float%d", bits))
+	}
+	tp := ""
+	if n > 0 {
+		tp = "[" + strings.Join(typeParams, ", ") + " fastWord]"
+	}
+	result := ""
+	if ret {
+		result = " uintptr"
+	}
+	fmt.Fprintf(buf, "\nfunc %s%s(fn reflect.Value, cif *types.CallInterface, cfn uintptr) {\n", wrapperName(n, bits, ret), tp)
+	fmt.Fprintf(buf, "\timpl := func(%s)%s {\n", strings.Join(params, ", "), result)
+	buf.WriteString("\t\tvar ints [15]uintptr\n")
+	for i := 1; i <= n; i++ {
+		fmt.Fprintf(buf, "\t\tints[%d] = uintptr(a%d)\n", i-1, i)
+	}
+	buf.WriteString("\t\tvar floats [8]uintptr\n")
+	if bits != 0 {
+		fmt.Fprintf(buf, "\t\tfloats[0] = uintptr(math.Float%dbits(f1))\n", bits)
+	}
+	if ret {
+		buf.WriteString("\t\tr := fastCallIF(cif, cfn, ints, floats)\n")
+	} else {
+		buf.WriteString("\t\tfastCallIF(cif, cfn, ints, floats)\n")
+	}
+	for i := 1; i <= n; i++ {
+		fmt.Fprintf(buf, "\t\truntime.KeepAlive(a%d)\n", i)
+	}
+	if ret {
+		buf.WriteString("\t\treturn r\n")
+	}
+	buf.WriteString("\t}\n\tforceFuncPtr(fn, &impl)\n}\n")
+}
+
+// emitDispatch writes registerFastFunc, which picks the wrapper instantiation
+// for an argument count, a pointer mask (bit i set: integer argument i is a
+// pointer), a trailing float width (0 for none) and a return shape.
+func emitDispatch(buf *bytes.Buffer) {
+	buf.WriteString(`
+// registerFastFunc sets fn to a zero-allocation wrapper whose parameter types
+// match the registered signature, and reports whether one was generated for
+// it. See fastWord.
+func registerFastFunc(fn reflect.Value, cif *types.CallInterface, cfn uintptr, numInts int, ptrMask uint32, floatBits int, hasReturn bool) bool {
+	switch floatBits {
+`)
+	for _, bits := range []int{0, 32, 64} {
+		maxInts := 15
+		if bits != 0 {
+			maxInts = 14
+		}
+		fmt.Fprintf(buf, "\tcase %d:\n\t\tswitch numInts {\n", bits)
+		for n := 0; n <= maxInts; n++ {
+			fmt.Fprintf(buf, "\t\tcase %d:\n\t\t\tswitch ptrMask {\n", n)
+			masks := 1
+			if n <= maxPointerMaskArgs {
+				masks = 1 << n
+			}
+			for mask := 0; mask < masks; mask++ {
+				var targs []string
+				for i := 0; i < n; i++ {
+					if mask&(1<<i) != 0 {
+						targs = append(targs, "unsafe.Pointer")
+					} else {
+						targs = append(targs, "uintptr")
+					}
+				}
+				inst := ""
+				if n > 0 {
+					inst = "[" + strings.Join(targs, ", ") + "]"
+				}
+				fmt.Fprintf(buf, "\t\t\tcase %d:\n\t\t\t\tif hasReturn {\n\t\t\t\t\t%s%s(fn, cif, cfn)\n\t\t\t\t} else {\n\t\t\t\t\t%s%s(fn, cif, cfn)\n\t\t\t\t}\n\t\t\t\treturn true\n",
+					mask, wrapperName(n, bits, true), inst, wrapperName(n, bits, false), inst)
+			}
+			buf.WriteString("\t\t\t}\n")
+		}
+		buf.WriteString("\t\t}\n")
+	}
+	buf.WriteString("\t}\n\treturn false\n}\n")
 }
 
 var tmplInterleavedFloat = `func registerFastFuncInterleavedFloat32x1(fn reflect.Value, cif *types.CallInterface, cfn uintptr, totalArgs, floatPos int, hasReturn bool) {
@@ -315,17 +356,32 @@ var tmplTryRegisterFastPath = `func tryRegisterFastPath(fn reflect.Value, cif *t
 	}
 
 	var numFloats, numInts int
+	var ptrMask uint32
 	trailingFloats := true
 	seenFloat := false
 	floatPos := -1
 
 	for i := 0; i < numIn; i++ {
 		switch ty.In(i).Kind() {
-		case reflect.Uintptr, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
-			reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-			reflect.Bool, reflect.Pointer, reflect.UnsafePointer:
+		// The fast wrappers take every integer argument as a uintptr, and
+		// forceFuncPtr installs them under fn's own type. Go's register ABI
+		// lets the callee spill its register arguments into a spill area the
+		// caller reserves and lays out from the declared type, so the two
+		// layouts must agree slot for slot. A narrower argument (int32, bool,
+		// ...) packs tighter in the caller's area than a uintptr does in the
+		// wrapper's: the wrapper then spills past the end of that area over
+		// the caller's own frame, and the GC later finds an integer where the
+		// caller keeps a pointer ("invalid pointer found on stack"). Only
+		// pointer-sized arguments share the layout, so anything narrower
+		// takes the reflect path.
+		case reflect.Uintptr, reflect.Uint, reflect.Uint64,
+			reflect.Int, reflect.Int64,
+			reflect.Pointer, reflect.UnsafePointer:
 			if seenFloat {
 				trailingFloats = false
+			}
+			if k := ty.In(i).Kind(); k == reflect.Pointer || k == reflect.UnsafePointer {
+				ptrMask |= 1 << numInts
 			}
 			numInts++
 		case reflect.Float32, reflect.Float64:
@@ -356,18 +412,17 @@ var tmplTryRegisterFastPath = `func tryRegisterFastPath(fn reflect.Value, cif *t
 	}
 
 	if numFloats == 0 {
-		registerFastFunc(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 0, hasReturn)
 	}
 	if numFloats == 1 && trailingFloats && ty.In(numInts).Kind() == reflect.Float32 {
-		registerFastFuncFloat32x1(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 32, hasReturn)
 	}
 	if numFloats == 1 && trailingFloats && ty.In(numInts).Kind() == reflect.Float64 {
-		registerFastFuncFloat64x1(fn, cif, cfn, numInts, hasReturn)
-		return true
+		return registerFastFunc(fn, cif, cfn, numInts, ptrMask, 64, hasReturn)
 	}
-	if numFloats == 1 && !trailingFloats && ty.In(floatPos).Kind() == reflect.Float32 {
+	// The interleaved wrappers take every integer argument as a uintptr, so
+	// they only fit signatures without pointers (see fastWord).
+	if numFloats == 1 && !trailingFloats && ptrMask == 0 && ty.In(floatPos).Kind() == reflect.Float32 {
 		registerFastFuncInterleavedFloat32x1(fn, cif, cfn, numIn, floatPos, hasReturn)
 		return true
 	}
