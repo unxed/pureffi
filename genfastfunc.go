@@ -321,9 +321,20 @@ var tmplTryRegisterFastPath = `func tryRegisterFastPath(fn reflect.Value, cif *t
 
 	for i := 0; i < numIn; i++ {
 		switch ty.In(i).Kind() {
-		case reflect.Uintptr, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
-			reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-			reflect.Bool, reflect.Pointer, reflect.UnsafePointer:
+		// The fast wrappers take every integer argument as a uintptr, and
+		// forceFuncPtr installs them under fn's own type. Go's register ABI
+		// lets the callee spill its register arguments into a spill area the
+		// caller reserves and lays out from the declared type, so the two
+		// layouts must agree slot for slot. A narrower argument (int32, bool,
+		// ...) packs tighter in the caller's area than a uintptr does in the
+		// wrapper's: the wrapper then spills past the end of that area over
+		// the caller's own frame, and the GC later finds an integer where the
+		// caller keeps a pointer ("invalid pointer found on stack"). Only
+		// pointer-sized arguments share the layout, so anything narrower
+		// takes the reflect path.
+		case reflect.Uintptr, reflect.Uint, reflect.Uint64,
+			reflect.Int, reflect.Int64,
+			reflect.Pointer, reflect.UnsafePointer:
 			if seenFloat {
 				trailingFloats = false
 			}
