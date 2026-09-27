@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: 2026 unxed
 
+// The fast path this tests exists only on these targets (zz_fast_func.go).
+//go:build (amd64 || arm64) && (darwin || freebsd || linux || netbsd)
+
 package purego_test
 
 import (
