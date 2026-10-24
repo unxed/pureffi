@@ -3,6 +3,7 @@
 package purego
 
 import (
+	"fmt"
 	"runtime"
 	"sync"
 	"syscall"
@@ -69,8 +70,9 @@ func clrAndGetErrno() (uintptr, func() error) {
 // Since SyscallN always treats all arguments as uintptr-sized pointers and returns a uintptr,
 // we can pre-compute the CallInterface once for each argument count and reuse it.
 var (
-	syscallCIFs [33]types.CallInterface
-	syscallOnce sync.Once
+	syscallCIFs      [33]types.CallInterface
+	syscallCIFErrors [33]error
+	syscallOnce      sync.Once
 )
 
 type syscallContext struct {
@@ -98,7 +100,7 @@ func initSyscallCIFs() {
 		for j := 0; j < i; j++ {
 			argTypes[j] = types.PointerTypeDescriptor
 		}
-		_ = ffi.PrepareCallInterface(&syscallCIFs[i], types.DefaultCall, types.PointerTypeDescriptor, argTypes)
+		syscallCIFErrors[i] = ffi.PrepareCallInterface(&syscallCIFs[i], types.DefaultCall, types.PointerTypeDescriptor, argTypes)
 	}
 }
 
@@ -119,6 +121,9 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	nArgs := len(args)
 	if nArgs > 32 {
 		panic("purego: too many arguments to SyscallN")
+	}
+	if err := syscallCIFErrors[nArgs]; err != nil {
+		panic(fmt.Sprintf("purego: failed to prepare SyscallN call interface for %d arguments: %v", nArgs, err))
 	}
 
 	cif := &syscallCIFs[nArgs]
