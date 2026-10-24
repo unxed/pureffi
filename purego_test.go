@@ -156,6 +156,29 @@ func TestSyscallNErrno(t *testing.T) {
 	}
 }
 
+func TestSyscallNErrnoFromFailedClose(t *testing.T) {
+	if runtime.GOOS != "linux" {
+		t.Skip("close(-1) errno regression test requires Linux")
+	}
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	closeFn, err := purego.Dlsym(handle, "close")
+	if err != nil {
+		t.Skipf("close not found: %v", err)
+	}
+	r1, _, errno := purego.SyscallN(closeFn, ^uintptr(0))
+	if int32(r1) != -1 {
+		t.Fatalf("close(-1) returned %d, want -1", int32(r1))
+	}
+	if errno != uintptr(syscall.EBADF) {
+		t.Fatalf("close(-1) errno = %v, want %v", syscall.Errno(errno), syscall.EBADF)
+	}
+}
+
 func TestSliceAsPointer(t *testing.T) {
 	// In purego, passing a slice should pass a pointer to its first element
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
@@ -372,6 +395,51 @@ func TestFloatAndBool(t *testing.T) {
 				t.Errorf("floor(%v) = %f, want %v", tc.in, res, tc.want)
 			}
 		}
+	}
+}
+
+func TestFunctionPointerReturn(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("dlsym is a POSIX symbol; this test does not exercise Windows function lookup")
+	}
+
+	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(libc)
+
+	var dlsym func(handle uintptr, name string) func(string) uintptr
+	purego.RegisterLibFunc(&dlsym, libc, "dlsym")
+
+	strlen := dlsym(libc, "strlen")
+	if strlen == nil {
+		t.Fatal("dlsym returned nil for strlen")
+	}
+	if got := strlen("pureffi"); got != uintptr(len("pureffi")) {
+		t.Errorf("strlen returned %d, want %d", got, len("pureffi"))
+	}
+
+	if missing := dlsym(libc, "pureffi_symbol_that_does_not_exist"); missing != nil {
+		t.Errorf("dlsym returned non-nil function for missing symbol")
+	}
+}
+
+func TestRegisterFunc_SmallStructReturn(t *testing.T) {
+	if runtime.GOOS != "linux" || runtime.GOARCH != "amd64" {
+		t.Skip("strtoull small-struct return ABI test requires linux/amd64")
+	}
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	type pair struct{ A, B uint16 }
+	var parse func(string, unsafe.Pointer, int) pair
+	purego.RegisterLibFunc(&parse, handle, "strtoull")
+	if got, want := parse("deadbeef00020001", nil, 16), (pair{A: 1, B: 2}); got != want {
+		t.Fatalf("strtoull small-struct result = %+v, want %+v", got, want)
 	}
 }
 

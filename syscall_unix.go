@@ -3,6 +3,7 @@
 package purego
 
 import (
+	"fmt"
 	"runtime"
 	"sync"
 	"syscall"
@@ -63,21 +64,21 @@ func clrAndGetErrno() (uintptr, func() error) {
 }
 
 // SyscallN takes fn, a C function pointer and a list of arguments as uintptr.
-// On Unix, it gracefully locates and calls the thread-local __errno_location
-// to capture the C errno value correctly.
+// On Unix, it uses the errno captured by goffi during the C call, so the result
+// cannot be read from a different OS thread.
 // Global cache of pre-prepared CallInterface structures for SyscallN (0 to 32 arguments).
 // Since SyscallN always treats all arguments as uintptr-sized pointers and returns a uintptr,
 // we can pre-compute the CallInterface once for each argument count and reuse it.
 var (
-	syscallCIFs [33]types.CallInterface
-	syscallOnce sync.Once
+	syscallCIFs      [33]types.CallInterface
+	syscallCIFErrors [33]error
+	syscallOnce      sync.Once
 )
 
 type syscallContext struct {
 	args    [32]uintptr
 	ffiArgs [32]unsafe.Pointer
 	result  uintptr
-	errVal  uintptr
 }
 
 var syscallPool = sync.Pool{
@@ -98,7 +99,7 @@ func initSyscallCIFs() {
 		for j := 0; j < i; j++ {
 			argTypes[j] = types.PointerTypeDescriptor
 		}
-		_ = ffi.PrepareCallInterface(&syscallCIFs[i], types.DefaultCall, types.PointerTypeDescriptor, argTypes)
+		syscallCIFErrors[i] = ffi.PrepareCallInterface(&syscallCIFs[i], types.DefaultCall, types.PointerTypeDescriptor, argTypes)
 	}
 }
 
@@ -120,6 +121,9 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	if nArgs > 32 {
 		panic("purego: too many arguments to SyscallN")
 	}
+	if err := syscallCIFErrors[nArgs]; err != nil {
+		panic(fmt.Sprintf("purego: failed to prepare SyscallN call interface for %d arguments: %v", nArgs, err))
+	}
 
 	cif := &syscallCIFs[nArgs]
 	ctx := syscallPool.Get().(*syscallContext)
@@ -127,11 +131,10 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	// Copy arguments into the stable, pooled context array
 	copy(ctx.args[:], args)
 	ctx.result = 0
-	ctx.errVal = 0
 
 	// Perform actual C call.
 	// ctx.ffiArgs is already pre-populated with addresses pointing into ctx.args.
-	_, _ = ffi.CallFunction(cif, unsafe.Pointer(fn), unsafe.Pointer(&ctx.result), ctx.ffiArgs[:nArgs])
+	callErrno, _ := ffi.CallFunction(cif, unsafe.Pointer(fn), unsafe.Pointer(&ctx.result), ctx.ffiArgs[:nArgs])
 
 	r1 = ctx.result
 
@@ -140,13 +143,8 @@ func SyscallN(fn uintptr, args ...uintptr) (r1, r2, err uintptr) {
 	// and zero-extended error returns (e.g., 0xffffffff) on 64-bit architectures.
 	// This matches standard POSIX C semantics, where errno is only valid on error,
 	// and completely eliminates FFI/LockOSThread overhead on successful hot paths!
-	if int32(r1) == -1 && errnoFn != 0 {
-		runtime.LockOSThread()
-		_, _ = ffi.CallFunction(&errnoCif, unsafe.Pointer(errnoFn), unsafe.Pointer(&ctx.errVal), nil)
-		if ctx.errVal != 0 {
-			err = uintptr(*(*int32)(unsafe.Pointer(ctx.errVal)))
-		}
-		runtime.UnlockOSThread()
+	if int32(r1) == -1 {
+		err = uintptr(callErrno)
 	}
 
 	syscallPool.Put(ctx)
