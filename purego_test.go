@@ -126,6 +126,28 @@ func TestSyscallN(t *testing.T) {
 		t.Errorf("SyscallN abs(-42) = %d, want 42", int32(r1))
 	}
 }
+
+func TestSyscallNSecondReturnWord(t *testing.T) {
+	if runtime.GOOS != "linux" || runtime.GOARCH != "amd64" {
+		t.Skip("ldiv's two-word return is covered on Linux amd64")
+	}
+
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	sym, err := purego.Dlsym(handle, "ldiv")
+	if err != nil {
+		t.Skipf("ldiv not found: %v", err)
+	}
+	r1, r2, _ := purego.SyscallN(sym, 7, 2)
+	if r1 != 3 || r2 != 1 {
+		t.Errorf("SyscallN ldiv(7, 2) = (%d, %d), want (3, 1)", r1, r2)
+	}
+}
+
 func TestSyscallNErrno(t *testing.T) {
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
 	if err != nil {
