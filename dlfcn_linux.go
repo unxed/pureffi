@@ -3,6 +3,8 @@
 package purego
 
 import (
+	"runtime"
+	"sync"
 	"unsafe"
 
 	"github.com/go-webgpu/goffi/ffi"
@@ -16,13 +18,47 @@ const (
 	RTLD_GLOBAL  = 0x100
 )
 
+var (
+	dlopenOnce sync.Once
+	dlopenFn   func(string, int32) uintptr
+	dlerrorFn  func() string
+	dlopenErr  error
+)
+
+func initDlopen() {
+	dlopenAddr, err := Dlsym(RTLD_DEFAULT, "dlopen")
+	if err != nil {
+		dlopenErr = err
+		return
+	}
+	dlerrorAddr, err := Dlsym(RTLD_DEFAULT, "dlerror")
+	if err != nil {
+		dlopenErr = err
+		return
+	}
+	RegisterFunc(&dlopenFn, dlopenAddr)
+	RegisterFunc(&dlerrorFn, dlerrorAddr)
+}
+
 // Dlopen examines the dynamic library or bundle file specified by path.
 func Dlopen(path string, mode int) (uintptr, error) {
-	ptr, err := ffi.LoadLibrary(path)
-	if err != nil {
-		return 0, Dlerror{err.Error()}
+	dlopenOnce.Do(initDlopen)
+	if dlopenErr != nil {
+		return 0, dlopenErr
 	}
-	return uintptr(ptr), nil
+
+	// dlerror is thread-local, so clear and read it on the same OS thread as dlopen.
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+	dlerrorFn()
+	handle := dlopenFn(path, int32(mode))
+	if handle == 0 {
+		if message := dlerrorFn(); message != "" {
+			return 0, Dlerror{message}
+		}
+		return 0, Dlerror{"dlopen failed: " + path}
+	}
+	return handle, nil
 }
 
 // Dlsym takes a "handle" of a dynamic library returned by Dlopen and the symbol name.
