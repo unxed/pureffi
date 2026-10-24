@@ -376,6 +376,10 @@ func TestFloatAndBool(t *testing.T) {
 }
 
 func TestFunctionPointerReturn(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("dlsym is a POSIX symbol; this test does not exercise Windows function lookup")
+	}
+
 	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
 	if err != nil {
 		t.Skipf("libc not found: %v", err)
