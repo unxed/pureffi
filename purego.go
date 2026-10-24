@@ -329,9 +329,16 @@ func unpackRet(t reflect.Type, rvalue unsafe.Pointer, retVal reflect.Value) {
 	case reflect.Bool:
 		b := *(*uint8)(rvalue)
 		retVal.Elem().SetBool(b != 0)
-	case reflect.Pointer, reflect.UnsafePointer, reflect.Slice, reflect.Func:
+	case reflect.Pointer, reflect.UnsafePointer, reflect.Slice:
 		addr := *(*uintptr)(rvalue)
 		*(*uintptr)(unsafe.Pointer(retVal.Pointer())) = addr
+	case reflect.Func:
+		addr := *(*uintptr)(rvalue)
+		if addr == 0 {
+			retVal.Elem().SetZero()
+			return
+		}
+		RegisterFunc(retVal.Interface(), addr)
 	}
 }
 

@@ -375,6 +375,33 @@ func TestFloatAndBool(t *testing.T) {
 	}
 }
 
+func TestFunctionPointerReturn(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("dlsym is a POSIX symbol; this test does not exercise Windows function lookup")
+	}
+
+	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(libc)
+
+	var dlsym func(handle uintptr, name string) func(string) uintptr
+	purego.RegisterLibFunc(&dlsym, libc, "dlsym")
+
+	strlen := dlsym(libc, "strlen")
+	if strlen == nil {
+		t.Fatal("dlsym returned nil for strlen")
+	}
+	if got := strlen("pureffi"); got != uintptr(len("pureffi")) {
+		t.Errorf("strlen returned %d, want %d", got, len("pureffi"))
+	}
+
+	if missing := dlsym(libc, "pureffi_symbol_that_does_not_exist"); missing != nil {
+		t.Errorf("dlsym returned non-nil function for missing symbol")
+	}
+}
+
 func TestRegisterFunc_SmallStructReturn(t *testing.T) {
 	if runtime.GOOS != "linux" || runtime.GOARCH != "amd64" {
 		t.Skip("strtoull small-struct return ABI test requires linux/amd64")
