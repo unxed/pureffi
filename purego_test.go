@@ -394,7 +394,7 @@ func TestFunctionPointerReturn(t *testing.T) {
 	}
 
 	if missing := dlsym(libc, "pureffi_symbol_that_does_not_exist"); missing != nil {
-		t.Errorf("dlsym returned non-nil function for missing symbol: %v", missing)
+		t.Errorf("dlsym returned non-nil function for missing symbol")
 	}
 }
 
