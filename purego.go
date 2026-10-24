@@ -32,6 +32,10 @@ func RegisterLibFunc(fptr any, handle uintptr, name string) {
 }
 
 // RegisterFunc takes a pointer to a Go function representing the calling convention of the C function.
+// For true C-variadic functions, the trailing `...any` values are C varargs, not ordinary fixed
+// parameters. On System V AMD64, `float64` values in that tail are currently unsupported because
+// goffi's call trampoline sets AL to 0; `float32` varargs are unverified (C promotes variadic
+// `float` to `double`). This limitation does not apply to fixed floating-point parameters.
 func RegisterFunc(fptr any, cfn uintptr) {
 	if cfn == 0 {
 		panic("purego: cfn is nil")

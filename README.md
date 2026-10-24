@@ -74,6 +74,8 @@ out of scope for a zero-CGO library.
 - **errno capturing**
 - **structs.HostLayout** support
 
+**C-variadic limitation:** On System V AMD64, `float64` values in the trailing `...any` arguments to a true C-variadic function are currently unsupported: goffi's call trampoline sets `AL` to 0, so for example `snprintf` receives 0 for a `double` vararg. This applies to the variadic tail, not fixed floating-point parameters. `float32` varargs are unverified; C promotes variadic `float` to `double`, so do not assume they work.
+
 ---
 
 ## Behind the Scenes
