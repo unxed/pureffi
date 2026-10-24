@@ -375,6 +375,29 @@ func TestFloatAndBool(t *testing.T) {
 	}
 }
 
+func TestFunctionPointerReturn(t *testing.T) {
+	libc, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(libc)
+
+	var dlsym func(handle uintptr, name string) func(string) uintptr
+	purego.RegisterLibFunc(&dlsym, libc, "dlsym")
+
+	strlen := dlsym(libc, "strlen")
+	if strlen == nil {
+		t.Fatal("dlsym returned nil for strlen")
+	}
+	if got := strlen("pureffi"); got != uintptr(len("pureffi")) {
+		t.Errorf("strlen returned %d, want %d", got, len("pureffi"))
+	}
+
+	if missing := dlsym(libc, "pureffi_symbol_that_does_not_exist"); missing != nil {
+		t.Errorf("dlsym returned non-nil function for missing symbol: %v", missing)
+	}
+}
+
 func TestErrnoAccess(t *testing.T) {
 	libName := getSystemLibrary()
 	if libName == "" {
