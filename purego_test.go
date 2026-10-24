@@ -402,6 +402,24 @@ func TestFunctionPointerReturn(t *testing.T) {
 	}
 }
 
+func TestRegisterFunc_SmallStructReturn(t *testing.T) {
+	if runtime.GOOS != "linux" || runtime.GOARCH != "amd64" {
+		t.Skip("strtoull small-struct return ABI test requires linux/amd64")
+	}
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	type pair struct{ A, B uint16 }
+	var parse func(string, unsafe.Pointer, int) pair
+	purego.RegisterLibFunc(&parse, handle, "strtoull")
+	if got, want := parse("deadbeef00020001", nil, 16), (pair{A: 1, B: 2}); got != want {
+		t.Fatalf("strtoull small-struct result = %+v, want %+v", got, want)
+	}
+}
+
 func TestErrnoAccess(t *testing.T) {
 	libName := getSystemLibrary()
 	if libName == "" {
