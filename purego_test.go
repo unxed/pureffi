@@ -156,6 +156,29 @@ func TestSyscallNErrno(t *testing.T) {
 	}
 }
 
+func TestSyscallNErrnoFromFailedClose(t *testing.T) {
+	if runtime.GOOS != "linux" {
+		t.Skip("close(-1) errno regression test requires Linux")
+	}
+	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
+	if err != nil {
+		t.Skipf("libc not found: %v", err)
+	}
+	defer purego.Dlclose(handle)
+
+	closeFn, err := purego.Dlsym(handle, "close")
+	if err != nil {
+		t.Skipf("close not found: %v", err)
+	}
+	r1, _, errno := purego.SyscallN(closeFn, ^uintptr(0))
+	if int32(r1) != -1 {
+		t.Fatalf("close(-1) returned %d, want -1", int32(r1))
+	}
+	if errno != uintptr(syscall.EBADF) {
+		t.Fatalf("close(-1) errno = %v, want %v", syscall.Errno(errno), syscall.EBADF)
+	}
+}
+
 func TestSliceAsPointer(t *testing.T) {
 	// In purego, passing a slice should pass a pointer to its first element
 	handle, err := purego.Dlopen(getLibc(), purego.RTLD_NOW)
