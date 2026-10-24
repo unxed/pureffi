@@ -205,6 +205,7 @@ func RegisterFunc(fptr any, cfn uintptr) {
 
 		var rvalue unsafe.Pointer
 		var retVal reflect.Value
+		var structRetBuf []byte
 
 		hasActualReturn := (numOut == 2) || (numOut == 1 && !hasError)
 		if hasActualReturn {
@@ -213,8 +214,13 @@ func RegisterFunc(fptr any, cfn uintptr) {
 			switch outType.Kind() {
 			case reflect.String, reflect.Bool, reflect.Pointer, reflect.UnsafePointer, reflect.Func, reflect.Slice:
 				rvalue = unsafe.Pointer(&ctx.retBuf[0])
+			case reflect.Struct:
+				// Older goffi versions may store a full machine word when returning
+				// small structs. Keep that write out of the Go result allocation.
+				structRetBuf = make([]byte, int(outType.Size())+7)
+				rvalue = unsafe.Pointer(&structRetBuf[0])
 			default:
-				// Primitive types or structures get populated directly into the new allocation
+				// Primitive types get populated directly into the new allocation.
 				rvalue = unsafe.Pointer(retVal.Pointer())
 			}
 		}
@@ -222,6 +228,9 @@ func RegisterFunc(fptr any, cfn uintptr) {
 		_, err := ffi.CallFunction(cif, unsafe.Pointer(cfn), rvalue, ctx.ffiArgs[:ffiArgsCount])
 		if err != nil {
 			panic(err)
+		}
+		if len(structRetBuf) != 0 {
+			copy(unsafe.Slice((*byte)(unsafe.Pointer(retVal.Pointer())), retVal.Type().Elem().Size()), structRetBuf)
 		}
 
 		var errVal error
@@ -320,9 +329,16 @@ func unpackRet(t reflect.Type, rvalue unsafe.Pointer, retVal reflect.Value) {
 	case reflect.Bool:
 		b := *(*uint8)(rvalue)
 		retVal.Elem().SetBool(b != 0)
-	case reflect.Pointer, reflect.UnsafePointer, reflect.Slice, reflect.Func:
+	case reflect.Pointer, reflect.UnsafePointer, reflect.Slice:
 		addr := *(*uintptr)(rvalue)
 		*(*uintptr)(unsafe.Pointer(retVal.Pointer())) = addr
+	case reflect.Func:
+		addr := *(*uintptr)(rvalue)
+		if addr == 0 {
+			retVal.Elem().SetZero()
+			return
+		}
+		RegisterFunc(retVal.Interface(), addr)
 	}
 }
 
